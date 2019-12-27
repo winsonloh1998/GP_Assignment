@@ -584,13 +584,11 @@ void optimusPrime()
 	upperArmJoint();
 	upperArm();
 
-	if (armUpStatus) {
-		glPushMatrix();
-		lowerArm();
-		glRotatef(armUpSpeed, 1, 0, 0);
-		hand();
-		glPopMatrix();
-	}
+	glPushMatrix();
+	glRotatef(armUpSpeed, 1, 0, 0);
+	lowerArm();
+	hand();
+	glPopMatrix();
 
 
 	glPushMatrix();
@@ -609,16 +607,13 @@ void optimusPrime()
 	glTranslatef(0, 0, -0.2);
 	upperArm();
 
-	if (armUpStatus) {
-		glPushMatrix();
-		lowerArm();
-		glRotatef(armUpSpeed, 1, 0, 0);
-		hand();
-		glPopMatrix();
-	}
-
+	glPushMatrix();
+	glRotatef(armUpSpeed, 1, 0, 0);
+	lowerArm();
+	hand();
 	glPopMatrix();
 
+	glPopMatrix();
 	glPopMatrix();
 }
 //--------------------------------------------------------------------
