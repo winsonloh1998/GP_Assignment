@@ -1330,16 +1330,519 @@ void chest() {
 	glVertex3f(0.4, 1.5, 0.45);
 	glEnd();
 }
+void head()
+{
+	//head x=-0.15/0.15 y=1.5/1.9 z=-0.05/0.25
+	//lefteye x=-0.12/-0.03 y=1.7/1.75 z=-0.05
+	//righteye x=0.03/0.12 y=1.7/1.725 z=-0.05
+	//mouth x=-0.15/0.15 y=1.5/1.65 z=-0.05/-0.07
 
-void head() {
-	//Front
+	//head dxxx
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.05, 1.9, -0.05);
+	glVertex3f(0.05, 1.9, -0.05);
+	glVertex3f(0.05, 2.05, -0.0);
+	glVertex3f(0.00, 2.1, -0.0);
+	glVertex3f(-0.05, 2.05, -0.0);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.05, 1.9, -0.07);
+	glVertex3f(0.05, 1.9, -0.07);
+	glVertex3f(0.05, 2.05, -0.02);
+	glVertex3f(0.00, 2.1, -0.02);
+	glVertex3f(-0.05, 2.05, -0.02);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.05, 1.9, -0.07);
+	glVertex3f(-0.05, 1.9, -0.05);
+	glVertex3f(-0.05, 2.05, -0.0);
+	glVertex3f(0.0, 2.1, -0.0);
+	glVertex3f(0.0, 2.1, -0.02);
+	glVertex3f(-0.05, 2.05, -0.02);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex3f(0.05, 1.9, -0.07);
+	glVertex3f(0.05, 1.9, -0.05);
+	glVertex3f(0.05, 2.05, -0.0);
+	glVertex3f(0.0, 2.1, -0.0);
+	glVertex3f(0.0, 2.1, -0.02);
+	glVertex3f(0.05, 2.05, -0.02);
+	glEnd();
+
+
+
+
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.05, 2.0, -0.00);
+	glVertex3f(0.05, 2.0, -0.00);
+	glVertex3f(0.05, 2.0, 0.25);
+	glVertex3f(-0.05, 2.0, 0.25);
+
+	glEnd();
+
+	//upper-part helmet
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glVertex3f(-0.14, 1.91, -0.05);
+	glVertex3f(-0.13, 1.92, -0.04);
+	glVertex3f(-0.12, 1.93, -0.03);
+	glVertex3f(-0.11, 1.94, -0.02);
+	glVertex3f(-0.10, 1.95, -0.01);
+	glVertex3f(-0.05, 2, 0);
+	glVertex3f(0.05, 2.0, 0.0);
+	glVertex3f(0.10, 1.95, 0.0);
+	glVertex3f(0.11, 1.94, -0.01);
+	glVertex3f(0.12, 1.93, -0.02);
+	glVertex3f(0.13, 1.92, -0.03);
+	glVertex3f(0.14, 1.91, -0.04);
+	glVertex3f(0.14, 1.91, -0.05);
+	glVertex3f(0.15, 1.9, -0.06);
+	glEnd();
+	
+	
+	glColor3f(1, 0, 0);
+	//left-upper-part-helmet
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.05, 2.0, 0.27);
+	glVertex3f(-0.06, 1.97, 0.27);
+	glVertex3f(-0.07, 1.95, 0.27);
+	glVertex3f(-0.15, 1.9, 0.25);
+	glVertex3f(-0.15, 1.88, 0.10);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glVertex3f(-0.14, 1.91, -0.05);
+	glVertex3f(-0.13, 1.92, -0.04);
+	glVertex3f(-0.12, 1.93, -0.03);
+	glVertex3f(-0.11, 1.94, -0.02);
+	glVertex3f(-0.10, 1.95, -0.01);
+	glVertex3f(-0.05, 2, 0);
+
+	glEnd();
+
+	glBegin(GL_POLYGON);
+
+	glVertex3f(-0.15, 1.9, 0.25);
+	glVertex3f(-0.15, 1.8, 0.25);
+	glVertex3f(-0.15, 1.88, 0.10);
+
+
+	glEnd();
+	
+
+	/*
+	//right upper-part helmet
 	glBegin(GL_LINE_LOOP);
+	glVertex3f(0.10, 2.0, 0.25);
+	glVertex3f(0.17, 1.8, 0.25);
+	glVertex3f(0.17, 1.88, 0.10);
+	glVertex3f(0.17, 1.9, -0.05);
+	glVertex3f(0.17, 1.9, -0.05);
+	glVertex3f(0.15, 1.9, -0.05);
+	glVertex3f(0.14, 1.91, -0.05);
+	glVertex3f(0.13, 1.92, -0.04);
+	glVertex3f(0.12, 1.93, -0.03);
+	glVertex3f(0.11, 1.94, -0.02);
+	glVertex3f(0.10, 1.95, -0.01);
+	glVertex3f(0.05, 2, 0);
+	glEnd();*/
+	glBegin(GL_POLYGON);
+	glVertex3f(0.05, 2.0, 0.27);
+	glVertex3f(0.06, 1.97, 0.27);
+	glVertex3f(0.07, 1.95, 0.27);
+	glVertex3f(0.15, 1.9, 0.25);
+	glVertex3f(0.15, 1.8, 0.25);
+	glVertex3f(0.15, 1.88, 0.10);
+	glVertex3f(0.15, 1.9, -0.05);
+	glVertex3f(0.15, 1.9, -0.05);
+	glVertex3f(0.15, 1.9, -0.05);
+	glVertex3f(0.14, 1.91, -0.05);
+	glVertex3f(0.13, 1.92, -0.04);
+	glVertex3f(0.12, 1.93, -0.03);
+	glVertex3f(0.11, 1.94, -0.02);
+	glVertex3f(0.10, 1.95, -0.01);
+	glVertex3f(0.05, 2, 0);
+
+	glEnd();
+
+
+
+
+	glColor3f(1, 1, 1);
+	//top part helmet
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.88, -0.07);
+	glVertex3f(-0.15, 1.9, -0.07);
+	glVertex3f(0.15, 1.9, -0.07);
+	glVertex3f(0.15, 1.88, -0.07);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.88, -0.05);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glVertex3f(0.15, 1.9, -0.05);
+	glVertex3f(0.15, 1.88, -0.05);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.88, -0.05);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glVertex3f(-0.15, 1.9, -0.07);
+	glVertex3f(-0.15, 1.88, -0.07);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex3f(0.15, 1.88, -0.05);
+	glVertex3f(0.15, 1.9, -0.05);
+	glVertex3f(0.15, 1.9, -0.07);
+	glVertex3f(0.15, 1.88, -0.07);
+	glEnd();
+	//top
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glVertex3f(-0.15, 1.9, -0.07);
+	glVertex3f(-0.15, 1.9, -0.07);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.88, -0.05);
+	glVertex3f(-0.15, 1.88, -0.07);
+	glVertex3f(-0.15, 1.88, -0.07);
+	glVertex3f(-0.15, 1.88, -0.05);
+	glEnd();
+
+	//back-part helmet
+	glColor3f(1, 1, 0);
+	glBegin(GL_POLYGON);
+	glVertex3f(0.15, 1.5, 0.25);
+	glVertex3f(0.15, 1.9, 0.25);
+	glVertex3f(0.07, 1.95, 0.27);
+	glVertex3f(0.06, 1.97, 0.27);
+	glVertex3f(0.05, 2.0, 0.27);
+	glVertex3f(0.0, 2.0, 0.27);
+	glVertex3f(-0.05, 2.0, 0.27);
+	glVertex3f(-0.06, 1.97, 0.27);
+	glVertex3f(-0.07, 1.95, 0.27);
+	glVertex3f(-0.15, 1.9, 0.25);
+	glVertex3f(-0.15, 1.5, 0.25);
+	glEnd();
+	glColor3f(1, 1, 1);
+	//============================
+	//right upper-part helmet
+
+	//top
+	glBegin(GL_POLYGON);
+	glVertex3f(0.15, 1.9, -0.05);
+	glVertex3f(0.15, 1.88, 0.10);
+	glVertex3f(0.15, 1.8, 0.25);
+	glVertex3f(0.17, 1.8, 0.25);
+	glVertex3f(0.17, 1.88, 0.10);
+	glVertex3f(0.17, 1.9, -0.05);
+	glEnd();
+	//left
+
+	glColor3f(1, 1, 0);
+	glBegin(GL_POLYGON);
+	glVertex3f(0.17, 1.7, -0.05);
+	glVertex3f(0.17, 1.7, 0.25);
+	glVertex3f(0.17, 1.8, 0.25);
+	glVertex3f(0.17, 1.88, 0.10);
+	glVertex3f(0.17, 1.9, -0.05);
+	glEnd();
+
+	//right
+	glBegin(GL_POLYGON);
+	glVertex3f(0.15, 1.7, -0.05);
+	glVertex3f(0.15, 1.7, 0.25);
+	glVertex3f(0.15, 1.8, 0.25);
+	glVertex3f(0.15, 1.88, 0.10);
+	glVertex3f(0.15, 1.9, -0.05);
+	glEnd();
+	//front
+	glBegin(GL_POLYGON);
+	glVertex3f(0.15, 1.7, -0.05);
+	glVertex3f(0.17, 1.7, -0.05);
+	glVertex3f(0.17, 1.9, -0.05);
+	glVertex3f(0.15, 1.9, -0.05);
+	glEnd();
+	//back
+	glColor3f(1, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex3f(0.15, 1.7, 0.25);
+	glVertex3f(0.17, 1.7, 0.25);
+	glVertex3f(0.17, 1.8, 0.25);
+	glVertex3f(0.15, 1.8, 0.25);
+	glEnd();
+	//============================
+//left upper-part helmet
+//top
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glVertex3f(-0.15, 1.88, 0.10);
+	glVertex3f(-0.15, 1.8, 0.25);
+	glVertex3f(-0.17, 1.8, 0.25);
+	glVertex3f(-0.17, 1.88, 0.10);
+	glVertex3f(-0.17, 1.9, -0.05);
+	glEnd();
+	//left
+
+	glColor3f(1, 1, 0);
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.17, 1.7, -0.05);
+	glVertex3f(-0.17, 1.7, 0.25);
+	glVertex3f(-0.17, 1.8, 0.25);
+	glVertex3f(-0.17, 1.88, 0.10);
+	glVertex3f(-0.17, 1.9, -0.05);
+	glEnd();
+
+	//right
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.7, -0.05);
+	glVertex3f(-0.15, 1.7, 0.25);
+	glVertex3f(-0.15, 1.8, 0.25);
+	glVertex3f(-0.15, 1.88, 0.10);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glEnd();
+	//front
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.7, -0.05);
+	glVertex3f(-0.17, 1.7, -0.05);
+	glVertex3f(-0.17, 1.9, -0.05);
+	glVertex3f(-0.15, 1.9, -0.05);
+	glEnd();
+	//back
+	glColor3f(1, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.7, 0.25);
+	glVertex3f(-0.17, 1.7, 0.25);
+	glVertex3f(-0.17, 1.8, 0.25);
+	glVertex3f(-0.15, 1.8, 0.25);
+	glEnd();
+	//=====================================================================
+		//left-bottom-part helmet 
+
+
+	GLUquadricObj* sphere = NULL;
+	sphere = gluNewQuadric();
+	glPushMatrix();
+	glTranslatef(-0.19, 1.7, 0.1);
+	glRotatef(90, 0, 1, 0);
+	gluQuadricDrawStyle(sphere, GLU_FILL);
+
+
+	gluSphere(sphere, 0.05, 50, 50);
+
+
+	gluDeleteQuadric(sphere);
+	glPopMatrix();
+
+	GLUquadricObj* cylinder = NULL;
+	cylinder = gluNewQuadric();
+	glPushMatrix();
+	glTranslatef(-0.19, 1.7, 0.1);
+	glRotatef(-90, 1, 0, 0);
+	gluQuadricDrawStyle(cylinder, GLU_FILL);
+	gluCylinder(cylinder, 0.03, 0.0, 0.3, 40, 40);
+
+
+
+
+
+	gluDeleteQuadric(cylinder);
+	glPopMatrix();
+
+	//front
+	glBegin(GL_POLYGON);
+	glColor3f(1, 0, 0);
+	glVertex3f(-0.15, 1.7, -0.05);
+	glVertex3f(-0.15, 1.65, -0.1);
+	glVertex3f(-0.15, 1.55, -0.1);
+	glVertex3f(-0.15, 1.5, -0.05);
+	glVertex3f(-0.17, 1.5, -0.05);
+	glVertex3f(-0.17, 1.55, -0.1);
+	glVertex3f(-0.17, 1.65, -0.1);
+	glVertex3f(-0.17, 1.7, -0.05);
+	glEnd();
+	//left
+
+
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 0);
+	glVertex3f(-0.17, 1.5, -0.05);
+	glVertex3f(-0.17, 1.55, -0.1);
+	glVertex3f(-0.17, 1.65, -0.1);
+	glVertex3f(-0.17, 1.7, -0.05);
+	glVertex3f(-0.17, 1.7, 0.25);
+	glVertex3f(-0.17, 1.5, 0.25);
+	glEnd();
+	//right
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 0);
+	glVertex3f(-0.15, 1.5, -0.05);
+	glVertex3f(-0.15, 1.55, -0.1);
+	glVertex3f(-0.15, 1.65, -0.1);
+	glVertex3f(-0.15, 1.7, -0.05);
+	glVertex3f(-0.15, 1.7, 0.25);
+	glVertex3f(-0.15, 1.5, 0.25);
+	glEnd();
+	//back
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 0);
+	glVertex3f(-0.15, 1.7, 0.25);
+	glVertex3f(-0.17, 1.7, 0.25);
+	glVertex3f(-0.17, 1.5, 0.25);
+	glVertex3f(-0.15, 1.5, 0.25);
+	glEnd();
+
+	//bottom
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.15, 1.5, -0.05);
+	glVertex3f(-0.17, 1.5, -0.05);
+	glVertex3f(-0.17, 1.7, 0.25);
+	glVertex3f(-0.15, 1.7, 0.25);
+	glEnd();
+	glColor3f(1, 1, 1);
+	//====================================================================
+	//right bottom part helmet
+
+	sphere = gluNewQuadric();
+	glPushMatrix();
+	glTranslatef(0.19, 1.7, 0.1);
+	glRotatef(90, 0, 1, 0);
+	gluQuadricDrawStyle(sphere, GLU_FILL);
+
+
+	gluSphere(sphere, 0.05, 50, 50);
+
+
+	gluDeleteQuadric(sphere);
+	glPopMatrix();
+
+
+	cylinder = gluNewQuadric();
+	glPushMatrix();
+	glTranslatef(0.19, 1.7, 0.1);
+	glRotatef(-90, 1, 0, 0);
+	gluQuadricDrawStyle(cylinder, GLU_FILL);
+	gluCylinder(cylinder, 0.03, 0.0, 0.3, 40, 40);
+
+
+
+
+
+	gluDeleteQuadric(cylinder);
+	glPopMatrix();
+
+	//front
+	glBegin(GL_POLYGON);
+	glColor3f(1, 0, 0);
+	glVertex3f(0.15, 1.7, -0.05);
+	glVertex3f(0.15, 1.65, -0.1);
+	glVertex3f(0.15, 1.55, -0.1);
+	glVertex3f(0.15, 1.5, -0.05);
+	glVertex3f(0.17, 1.5, -0.05);
+	glVertex3f(0.17, 1.55, -0.1);
+	glVertex3f(0.17, 1.65, -0.1);
+	glVertex3f(0.17, 1.7, -0.05);
+	glEnd();
+	//left
+
+
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 0);
+	glVertex3f(0.17, 1.5, -0.05);
+	glVertex3f(0.17, 1.55, -0.1);
+	glVertex3f(0.17, 1.65, -0.1);
+	glVertex3f(0.17, 1.7, -0.05);
+	glVertex3f(0.17, 1.7, 0.25);
+	glVertex3f(0.17, 1.5, 0.25);
+	glEnd();
+	//right
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 0);
+	glVertex3f(0.15, 1.5, -0.05);
+	glVertex3f(0.15, 1.55, -0.1);
+	glVertex3f(0.15, 1.65, -0.1);
+	glVertex3f(0.15, 1.7, -0.05);
+	glVertex3f(0.15, 1.7, 0.25);
+	glVertex3f(0.15, 1.5, 0.25);
+	glEnd();
+	//back
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 0);
+	glVertex3f(0.15, 1.7, 0.25);
+	glVertex3f(0.17, 1.7, 0.25);
+	glVertex3f(0.17, 1.5, 0.25);
+	glVertex3f(0.15, 1.5, 0.25);
+	glEnd();
+
+	//bottom
+	glBegin(GL_POLYGON);
+	glVertex3f(0.15, 1.5, -0.05);
+	glVertex3f(0.17, 1.5, -0.05);
+	glVertex3f(0.17, 1.7, 0.25);
+	glVertex3f(0.15, 1.7, 0.25);
+	glEnd();
+	glColor3f(1, 1, 1);
+	//====================================================================
+
+		//left eye
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.10, 1.7, -0.051);
+	glVertex3f(-0.12, 1.725, -0.051);
+	glVertex3f(-0.10, 1.75, -0.051);
+	glVertex3f(-0.05, 1.75, -0.051);
+	glVertex3f(-0.03, 1.725, -0.051);
+	glVertex3f(-0.05, 1.7, -0.051);
+	glEnd();
+	//right eye
+	glBegin(GL_POLYGON);
+	glVertex3f(0.10, 1.7, -0.051);
+	glVertex3f(0.12, 1.725, -0.051);
+	glVertex3f(0.10, 1.75, -0.051);
+	glVertex3f(0.05, 1.75, -0.051);
+	glVertex3f(0.03, 1.725, -0.051);
+	glVertex3f(0.05, 1.7, -0.051);
+	glEnd();
+	//mouth
+	glBegin(GL_QUADS);
+	glVertex3f(-0.15, 1.5, -0.05);
+	glVertex3f(-0.15, 1.65, -0.05);
+	glVertex3f(0.0, 1.65, -0.07);
+	glVertex3f(0.0, 1.5, -0.07);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(0.15, 1.5, -0.05);
+	glVertex3f(0.15, 1.65, -0.05);
+	glVertex3f(0.0, 1.65, -0.07);
+	glVertex3f(0.0, 1.5, -0.07);
+	glEnd();
+
+	//nose
+	glBegin(GL_QUADS);
+	glVertex3f(0.01, 1.65, -0.051);
+	glVertex3f(0.01, 1.725, -0.051);
+	glVertex3f(-0.01, 1.725, -0.051);
+	glVertex3f(-0.01, 1.65, -0.051);
+	glEnd();
+
+
+
+	//Front
+	glColor3f(0, 1, 0);
+	glBegin(GL_QUADS);
 	glVertex3f(-0.15, 1.9, -0.05);
 	glVertex3f(0.15, 1.9, -0.05);
 	glVertex3f(0.15, 1.5, -0.05);
 	glVertex3f(-0.15, 1.5, -0.05);
 	glEnd();
-
+	glColor3f(1, 1, 1);
+	/*
 	//Left
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(-0.15, 1.5, -0.05);
@@ -1373,14 +1876,15 @@ void head() {
 	glEnd();
 
 	//Back
+	glColor3f(0, 0, 1);
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(0.15, 1.5, 0.25);
 	glVertex3f(-0.15, 1.5, 0.25);
 	glVertex3f(-0.15, 1.9, 0.25);
 	glVertex3f(0.15, 1.9, 0.25);
 	glEnd();
+	glColor3f(1, 1, 1);*/
 }
-
 void upperArmJoint() {
 	//Front
 	glBegin(GL_LINE_LOOP);
@@ -1872,7 +2376,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
-
+	
 	glScalef(0.4, 0.4, 0.4);
 	while (true)
 	{
