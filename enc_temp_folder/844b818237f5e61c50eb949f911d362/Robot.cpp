@@ -10,7 +10,7 @@
 	char s[256];
 	float leftArmUpSpeed = 0.0;
 	int leftArmUpStatus = 0;
-	float x = -1.8, y = 1.3, z = 0.0;
+	float x = -1.8, y = -0.8, z = 0.0;
 	float rightArmUpSpeed = 0.0;
 	int rightArmUpStatus = 0;
 	LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
