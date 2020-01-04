@@ -9,11 +9,28 @@
 
 #define WINDOW_TITLE "Optimus Prime"
 
+int leftOrRight = 0; /* [None - 0] [Left - 1]  [Right - 2] */
+
+/* Whole Arm Up And Down Speed*/
+float leftWholeArmSpeed = 0.0;
+float rightWholeArmSpeed = 0.0;
+
+/* Arm Up And Down Speed */
 float leftArmUpSpeed = 0.0;
-int leftArmUpStatus = 0;
-float x = 0.0, y = 0.0, z = 0.0;
 float rightArmUpSpeed = 0.0;
-int rightArmUpStatus = 0;
+
+/* Fingers Movement */
+float leftUpperFingerDegree = 30.0;
+float leftMiddleFingerDegree = 30.0;
+float rightUpperFingerDegree = 30.0;
+float rightMiddleFingerDegree = 30.0;
+
+float thumbLowerFingerDegree = 0.0;
+float thumbUpperFingerDegree = 0.0;
+
+
+float x = 0.0, y = 0.0, z = 0.0;
+
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
@@ -33,10 +50,6 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			glRotatef(-1, 1, 0, 0);
 		else if (wParam == VK_DOWN)
 			glRotatef(1, 1, 0, 0);
-		else if (wParam == 'L')
-			leftArmUpStatus = 1;
-		else if (wParam == 'R')
-			rightArmUpStatus = 1;
 		else if (wParam == 'W')
 			y += 0.1;
 		else if (wParam == 'S')
@@ -49,6 +62,153 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			z += 0.1;
 		else if (wParam == 'E')
 			z -= 0.1;
+		else if (wParam == 'N')
+			leftOrRight = 1;
+		else if (wParam == 'M')
+			leftOrRight = 2;
+		else if (wParam == '0')
+		{
+			if (leftOrRight == 1) {
+				leftUpperFingerDegree++;
+				if (leftMiddleFingerDegree >= 90) {
+					leftUpperFingerDegree = 90;
+					leftMiddleFingerDegree = 90;
+				}
+				else if (leftUpperFingerDegree >= 90) {
+					leftMiddleFingerDegree++;
+					leftUpperFingerDegree = 90;
+				}
+			}
+			else if (leftOrRight == 2) 
+			{
+				rightUpperFingerDegree++;
+				if (rightMiddleFingerDegree >= 90) {
+					rightUpperFingerDegree = 90;
+					rightMiddleFingerDegree = 90;
+				}
+				else if (rightUpperFingerDegree >= 90) {
+					rightMiddleFingerDegree++;
+					rightUpperFingerDegree = 90;
+				}
+			}
+		}
+		else if (wParam == '9')
+		{
+			if (leftOrRight == 1) {
+				leftMiddleFingerDegree--;
+				if (leftUpperFingerDegree <= 30) {
+					leftUpperFingerDegree = 30;
+					leftMiddleFingerDegree = 30;
+				}
+				else if (leftMiddleFingerDegree <= 30) {
+					leftUpperFingerDegree--;
+					leftMiddleFingerDegree = 30;
+				}
+			}
+			else if (leftOrRight == 2) {
+				rightMiddleFingerDegree--;
+				if (rightUpperFingerDegree <= 30) {
+					rightUpperFingerDegree = 30;
+					rightMiddleFingerDegree = 30;
+				}
+				else if (rightMiddleFingerDegree <= 30) {
+					rightUpperFingerDegree--;
+					rightMiddleFingerDegree = 30;
+				}
+			}
+		}
+		else if (wParam == '8')
+		{
+			if (leftOrRight == 1) {
+				leftMiddleFingerDegree--;
+				if (leftUpperFingerDegree <= 0) {
+					leftUpperFingerDegree = 0;
+					leftMiddleFingerDegree = 0;
+				}
+				else if (leftMiddleFingerDegree <= 0) {
+					leftUpperFingerDegree--;
+					leftMiddleFingerDegree = 0;
+				}
+			}
+			else if (leftOrRight == 2) {
+				rightMiddleFingerDegree--;
+				if (rightUpperFingerDegree <= 0) {
+					rightUpperFingerDegree = 0;
+					rightMiddleFingerDegree = 0;
+				}
+				else if (rightMiddleFingerDegree <= 0) {
+					rightUpperFingerDegree--;
+					rightMiddleFingerDegree = 0;
+				}
+			}
+		}
+		else if (wParam == '7')
+		{
+			thumbLowerFingerDegree++;
+			if (thumbUpperFingerDegree >= 20) {
+				thumbUpperFingerDegree = 20;
+				thumbLowerFingerDegree = 20;
+			}
+			else if (thumbLowerFingerDegree++ >= 20) {
+				thumbUpperFingerDegree++;
+				thumbLowerFingerDegree = 20;
+			}
+		}
+		else if (wParam == '6') 
+		{
+			if (leftOrRight == 1) {
+				leftArmUpSpeed++;
+				if (leftArmUpSpeed >= 130)
+					leftArmUpSpeed = 130;
+			}
+			else if (leftOrRight == 2) {
+				rightArmUpSpeed++;
+				if (rightArmUpSpeed >= 130)
+					rightArmUpSpeed = 130;
+			}
+		}
+		else if (wParam == '5') {
+			if (leftOrRight == 1) {
+				leftArmUpSpeed--;
+				if (leftArmUpSpeed <= 0)
+					leftArmUpSpeed = 0;
+			}
+			else if (leftOrRight == 2) {
+				rightArmUpSpeed--;
+				if (rightArmUpSpeed <= 0)
+					rightArmUpSpeed = 0;
+			}
+		}
+		else if (wParam == '4') 
+		{
+			if (leftOrRight == 1) 
+			{
+				leftWholeArmSpeed++;
+				if (leftWholeArmSpeed >= 180)
+					leftWholeArmSpeed = 180;
+			}
+			else if (leftOrRight == 2) 
+			{
+				rightWholeArmSpeed++;
+				if (rightWholeArmSpeed >= 180)
+					rightWholeArmSpeed = 180;
+			}
+		}
+		else if (wParam == '3')
+		{
+			if (leftOrRight == 1)
+			{
+				leftWholeArmSpeed--;
+				if (leftWholeArmSpeed <= 0)
+					leftWholeArmSpeed = 0;
+			}
+			else if (leftOrRight == 2)
+			{
+				rightWholeArmSpeed--;
+				if (rightWholeArmSpeed <= 0)
+					rightWholeArmSpeed = 0;
+			}
+		}
 		break;
 
 	case WM_MOUSEWHEEL:
@@ -99,6 +259,7 @@ bool initPixelFormat(HDC hdc)
 	}
 }
 //--------------------------------------------------------------------
+
 void shoePart1() {
 	//Front
 	glBegin(GL_LINE_LOOP);
@@ -648,11 +809,11 @@ void legTyre() {
 void leg() {
 	//Front
 	glBegin(GL_LINE_LOOP);
-	glVertex3f(-0.4, -0.7,-0.2);
+	glVertex3f(-0.4, -0.7, -0.2);
 	glVertex3f(-0.15, -0.7, -0.2);
 	glVertex3f(-0.15, -2, -0.2);
 	glVertex3f(-0.4, -2, -0.2);
-	glEnd();	
+	glEnd();
 
 	//Left
 	glBegin(GL_LINE_LOOP);
@@ -1058,7 +1219,7 @@ void buttDesign() {
 	buttTriangle();
 	glPopMatrix();
 
-	
+
 	//Right Part Triangle in Butt Area
 	glPushMatrix();
 	glTranslatef(0, 0, -0.6);
@@ -1249,7 +1410,7 @@ void butt() {
 	glVertex3f(-0.13, -0.15, 0.3);
 	glVertex3f(-0.4, 0.1, 0.3);
 	glEnd();
-	
+
 	//Butt is Designed
 	buttDesign();
 }
@@ -1395,7 +1556,7 @@ void sixPackArmor1() {
 	glEnd();
 
 	glColor3f(1, 0, 0);
-	
+
 	//Left Six-Pack Blader
 	sixPackBlader();
 
@@ -1648,7 +1809,7 @@ void chestMirrorFrameSide() {
 	glEnd();
 
 	//////////////////////////////////////// Frame Side 4 ////////////////////////////////////////////
-	
+
 	//Frame Side 4 - Front
 	glBegin(GL_POLYGON);
 	glVertex3f(-0.35, 1.05, -0.35);
@@ -1762,7 +1923,7 @@ void chestMirrorFrame() {
 	glVertex3f(0, 1.0, -0.25);
 	glVertex3f(0, 1.0, -0.35);
 	glEnd();
-	
+
 	//Left Frame
 	chestMirrorFrameSide();
 	chestMirror();
@@ -1777,7 +1938,7 @@ void chestMirrorFrame() {
 
 void chestArmor1() {
 	/*
-	//Front 
+	//Front
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(-0.4, 1.4, -0.3);
 	glVertex3f(0.4, 1.4, -0.3);
@@ -1956,7 +2117,7 @@ void middleChest() {
 	glVertex3f(0.35, 0.8, -0.3);
 	glEnd();
 
-	
+
 	//Right Front
 	glBegin(GL_POLYGON);
 	glVertex3f(0.25, 1, -0.35);
@@ -1964,7 +2125,7 @@ void middleChest() {
 	glVertex3f(0.35, 0.8, -0.3);
 	glVertex3f(0.27, 0.8, -0.3);
 	glEnd();
-	
+
 	//Bottom
 	glBegin(GL_POLYGON);
 	glVertex3f(0.35, 0.8, -0.3);
@@ -2083,8 +2244,8 @@ void head()
 	glVertex3f(0.14, 1.91, -0.05);
 	glVertex3f(0.15, 1.9, -0.06);
 	glEnd();
-	
-	
+
+
 	glColor3f(1, 0, 0);
 	//left-upper-part-helmet
 	glBegin(GL_POLYGON);
@@ -2113,7 +2274,7 @@ void head()
 
 
 	glEnd();
-	
+
 
 	/*
 	//right upper-part helmet
@@ -3072,54 +3233,570 @@ void armAntenna() {
 	glPopMatrix();
 }
 
-void hand() {
+void thumbFingers() {
+
+	glPushMatrix();
+	glRotatef(thumbLowerFingerDegree, 1, 0, 0);
+
+	/* Lower Thumb Section */
+	//Thumb Finger - Front 
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.58, 0.05, -0.0425);
+	glVertex3f(-0.53, 0.05, -0.0425);
+	glVertex3f(-0.53, -0.05, -0.0425);
+	glVertex3f(-0.58, -0.05, -0.0425);
+	glEnd();
+
+	//Thumb Finger - Left
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.58, -0.05, -0.0425);
+	glVertex3f(-0.58, -0.05, 0.0075);
+	glVertex3f(-0.58, 0.05, 0.0075);
+	glVertex3f(-0.58, 0.05, -0.0425);
+	glEnd();
+
+	//Thumb Finger - Top
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.58, 0.05, -0.0425);
+	glVertex3f(-0.58, 0.05, 0.0075);
+	glVertex3f(-0.53, 0.05, 0.0075);
+	glVertex3f(-0.53, 0.05, -0.0425);
+	glEnd();
+
+	//Thumb Finger - Right
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.53, 0.05, -0.0425);
+	glVertex3f(-0.53, 0.05, 0.0075);
+	glVertex3f(-0.53, -0.05, 0.0075);
+	glVertex3f(-0.53, -0.05, -0.0425);
+	glEnd();
+
+	//Thumb Finger - Bottom
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.53, -0.05, -0.0425);
+	glVertex3f(-0.58, -0.05, -0.0425);
+	glVertex3f(-0.58, -0.05, 0.0075);
+	glVertex3f(-0.53, -0.05, 0.0075);
+	glEnd();
+
+	//Thumb Finger - Back
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.53, -0.05, 0.0075);
+	glVertex3f(-0.58, -0.05, 0.0075);
+	glVertex3f(-0.58, 0.05, 0.0075);
+	glVertex3f(-0.53, 0.05, 0.0075);
+	glEnd();
+
+
+	////////////////////////////////////////////////////////////////
+
+	/* Upper Thumb Section */
+
+	glPushMatrix();
+	glRotatef(thumbUpperFingerDegree, 1, 0, 0);
+
+	//Thumb Finger - Front 
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.58, -0.05, -0.0425);
+	glVertex3f(-0.53, -0.05, -0.0425);
+	glVertex3f(-0.53, -0.1, -0.0425);
+	glVertex3f(-0.58, -0.1, -0.0425);
+	glEnd();
+
+	//Thumb Finger - Left
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.58, -0.1, -0.0425);
+	glVertex3f(-0.58, -0.1, 0.0075);
+	glVertex3f(-0.58, -0.05, 0.0075);
+	glVertex3f(-0.58, -0.05, -0.0425);
+	glEnd();
+
+	//Thumb Finger - Top
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.58, -0.05, -0.0425);
+	glVertex3f(-0.58, -0.05, 0.0075);
+	glVertex3f(-0.53, -0.05, 0.0075);
+	glVertex3f(-0.53, -0.05, -0.0425);
+	glEnd();
+
+	//Thumb Finger - Right
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.53, -0.05, -0.0425);
+	glVertex3f(-0.53, -0.05, 0.0075);
+	glVertex3f(-0.53, -0.1, 0.0075);
+	glVertex3f(-0.53, -0.1, -0.0425);
+	glEnd();
+
+	//Thumb Finger - Bottom
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.53, -0.1, -0.0425);
+	glVertex3f(-0.58, -0.1, -0.0425);
+	glVertex3f(-0.58, -0.1, 0.0075);
+	glVertex3f(-0.53, -0.1, 0.0075);
+	glEnd();
+
+	//Thumb Finger - Back
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(-0.53, -0.1, 0.0075);
+	glVertex3f(-0.58, -0.1, 0.0075);
+	glVertex3f(-0.58, -0.05, 0.0075);
+	glVertex3f(-0.53, -0.05, 0.0075);
+	glEnd();
+	glPopMatrix();
+
+	glPopMatrix();
+}
+
+void otherFingers(int leftRight) {
+
+	if (leftRight == 1) {
+		/* Lower Part */
+		//Front
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.05, 0.0075);
+		glVertex3f(-0.6, -0.05, 0.0075);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glEnd();
+
+		//Left
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.65, -0.05, 0.0575);
+		glVertex3f(-0.65, -0.05, 0.0075);
+		glEnd();
+
+		//Top
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.05, 0.0075);
+		glVertex3f(-0.65, -0.05, 0.0575);
+		glVertex3f(-0.6, -0.05, 0.0575);
+		glVertex3f(-0.6, -0.05, 0.0075);
+		glEnd();
+
+		//Right
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.05, 0.0075);
+		glVertex3f(-0.6, -0.05, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glEnd();
+
+		//Bottom
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glEnd();
+
+		//Back
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.65, -0.05, 0.0575);
+		glVertex3f(-0.6, -0.05, 0.0575);
+		glEnd();
+
+		////////////////////////////////////////////////////////////////////
+
+		/* Middle Part */
+		glPushMatrix();
+		glTranslatef(-0.6, -0.16, 0.0075);
+		glRotatef((rightMiddleFingerDegree * -1.0), 0, 0, 1);
+		glTranslatef(0.6, 0.16, -0.0075);
+
+		//Front
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glEnd();
+
+		//Left
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glEnd();
+
+		//Top
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glEnd();
+
+		//Right
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glEnd();
+
+		//Bottom
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glEnd();
+
+		//Back
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glEnd();
+
+
+		////////////////////////////////////////////////////////////////////
+
+		/* Upper Part */
+		glPushMatrix();
+		glTranslatef(-0.6, -0.24, 0.0075);
+		glRotatef((rightUpperFingerDegree * -1.0), 0, 0, 1);
+		glTranslatef(0.6, 0.24, -0.0075);
+
+		//Front
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glVertex3f(-0.6, -0.3, 0.0075);
+		glVertex3f(-0.65, -0.3, 0.0075);
+		glEnd();
+
+		//Left
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.3, 0.0075);
+		glVertex3f(-0.65, -0.3, 0.0575);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glEnd();
+
+		//Top
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glEnd();
+
+		//Right
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.3, 0.0575);
+		glVertex3f(-0.6, -0.3, 0.0075);
+		glEnd();
+
+		//Bottom
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.3, 0.0075);
+		glVertex3f(-0.65, -0.3, 0.0075);
+		glVertex3f(-0.65, -0.3, 0.0575);
+		glVertex3f(-0.6, -0.3, 0.0575);
+		glEnd();
+
+		//Back
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.3, 0.0575);
+		glVertex3f(-0.65, -0.3, 0.0575);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glEnd();
+		glPopMatrix();
+
+		glPopMatrix();
+	}
+	else if (leftRight == 2) {
+		/* Lower Part */
+		//Front
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.05, 0.0075);
+		glVertex3f(-0.6, -0.05, 0.0075);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glEnd();
+
+		//Left
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.65, -0.05, 0.0575);
+		glVertex3f(-0.65, -0.05, 0.0075);
+		glEnd();
+
+		//Top
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.05, 0.0075);
+		glVertex3f(-0.65, -0.05, 0.0575);
+		glVertex3f(-0.6, -0.05, 0.0575);
+		glVertex3f(-0.6, -0.05, 0.0075);
+		glEnd();
+
+		//Right
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.05, 0.0075);
+		glVertex3f(-0.6, -0.05, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glEnd();
+
+		//Bottom
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glEnd();
+
+		//Back
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.65, -0.05, 0.0575);
+		glVertex3f(-0.6, -0.05, 0.0575);
+		glEnd();
+
+		////////////////////////////////////////////////////////////////////
+
+		/* Middle Part */
+		glPushMatrix();
+		glTranslatef(-0.65, -0.16, 0.0075);
+		glRotatef((leftMiddleFingerDegree * 1.0), 0, 0, 1);
+		glTranslatef(0.65, 0.16, -0.0075);
+
+		//Front
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glEnd();
+
+		//Left
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glEnd();
+
+		//Top
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.16, 0.0075);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glEnd();
+
+		//Right
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.16, 0.0075);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glEnd();
+
+		//Bottom
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glEnd();
+
+		//Back
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.65, -0.16, 0.0575);
+		glVertex3f(-0.6, -0.16, 0.0575);
+		glEnd();
+
+
+		////////////////////////////////////////////////////////////////////
+
+		/* Upper Part */
+		glPushMatrix();
+		glTranslatef(-0.65, -0.24, 0.0075);
+		glRotatef((leftUpperFingerDegree * 1.0), 0, 0, 1);
+		glTranslatef(0.65, 0.24, -0.0075);
+
+		//Front
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glVertex3f(-0.6, -0.3, 0.0075);
+		glVertex3f(-0.65, -0.3, 0.0075);
+		glEnd();
+
+		//Left
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.3, 0.0075);
+		glVertex3f(-0.65, -0.3, 0.0575);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glEnd();
+
+		//Top
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.65, -0.24, 0.0075);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glEnd();
+
+		//Right
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.24, 0.0075);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.3, 0.0575);
+		glVertex3f(-0.6, -0.3, 0.0075);
+		glEnd();
+
+		//Bottom
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.3, 0.0075);
+		glVertex3f(-0.65, -0.3, 0.0075);
+		glVertex3f(-0.65, -0.3, 0.0575);
+		glVertex3f(-0.6, -0.3, 0.0575);
+		glEnd();
+
+		//Back
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.6, -0.3, 0.0575);
+		glVertex3f(-0.65, -0.3, 0.0575);
+		glVertex3f(-0.65, -0.24, 0.0575);
+		glVertex3f(-0.6, -0.24, 0.0575);
+		glEnd();
+		glPopMatrix();
+
+		glPopMatrix();
+	}
+	
+}
+
+void hand(int leftRight) {
 	//Front
 	glBegin(GL_LINE_LOOP);
-	glVertex3f(-0.68, 0.1, 0.05);
-	glVertex3f(-0.47, 0.1, 0.05);
-	glVertex3f(-0.47, -0.1, 0.05);
-	glVertex3f(-0.68, -0.1, 0.05);
+	glVertex3f(-0.65, 0.1, 0.0075);
+	glVertex3f(-0.53, 0.1, 0.0075);
+	glVertex3f(-0.53, -0.05, 0.0075);
+	glVertex3f(-0.65, -0.05, 0.0075);
 	glEnd();
 
 	//Left
 	glBegin(GL_LINE_LOOP);
-	glVertex3f(-0.68, -0.1, 0.05);
-	glVertex3f(-0.68, -0.1, 0.15);
-	glVertex3f(-0.68, 0.1, 0.15);
-	glVertex3f(-0.68, 0.1, 0.05);
+	glVertex3f(-0.65, -0.05, 0.0075);
+	glVertex3f(-0.65, -0.05, 0.2075);
+	glVertex3f(-0.65, 0.1, 0.2075);
+	glVertex3f(-0.65, 0.1, 0.0075);
 	glEnd();
 
 	//Top
 	glBegin(GL_LINE_LOOP);
-	glVertex3f(-0.68, 0.1, 0.05);
-	glVertex3f(-0.68, 0.1, 0.15);
-	glVertex3f(-0.47, 0.1, 0.15);
-	glVertex3f(-0.47, 0.1, 0.05);
+	glVertex3f(-0.65, 0.1, 0.0075);
+	glVertex3f(-0.65, 0.1, 0.2075);
+	glVertex3f(-0.53, 0.1, 0.2075);
+	glVertex3f(-0.53, 0.1, 0.0075);
 	glEnd();
 
 	//Right
 	glBegin(GL_LINE_LOOP);
-	glVertex3f(-0.47, 0.1, 0.05);
-	glVertex3f(-0.47, 0.1, 0.15);
-	glVertex3f(-0.47, -0.1, 0.15);
-	glVertex3f(-0.47, -0.1, 0.05);
+	glVertex3f(-0.53, 0.1, 0.0075);
+	glVertex3f(-0.53, 0.1, 0.2075);
+	glVertex3f(-0.53, -0.05, 0.2075);
+	glVertex3f(-0.53, -0.05, 0.0075);
 	glEnd();
 
 	//Bottom
 	glBegin(GL_LINE_LOOP);
-	glVertex3f(-0.47, -0.1, 0.05);
-	glVertex3f(-0.68, -0.1, 0.05);
-	glVertex3f(-0.68, -0.1, 0.15);
-	glVertex3f(-0.47, -0.1, 0.15);
+	glVertex3f(-0.53, -0.05, 0.0075);
+	glVertex3f(-0.65, -0.05, 0.0075);
+	glVertex3f(-0.65, -0.05, 0.2075);
+	glVertex3f(-0.53, -0.05, 0.2075);
 	glEnd();
 
 	//Back
 	glBegin(GL_LINE_LOOP);
-	glVertex3f(-0.47, -0.1, 0.15);
-	glVertex3f(-0.68, -0.1, 0.15);
-	glVertex3f(-0.68, 0.1, 0.15);
-	glVertex3f(-0.47, 0.1, 0.15);
+	glVertex3f(-0.53, -0.05, 0.2075);
+	glVertex3f(-0.65, -0.05, 0.2075);
+	glVertex3f(-0.65, 0.1, 0.2075);
+	glVertex3f(-0.53, 0.1, 0.2075);
 	glEnd();
+
+	/* FINGERS */
+	if (leftRight == 1) {
+		/* Right Hand */
+		//Thumb Finger
+		glPushMatrix();
+		glTranslatef(-0.07, 0, 0);
+		thumbFingers();
+		glPopMatrix();
+
+		//Index Finger
+		glPushMatrix();
+		glTranslatef(0.07, 0, 0);
+		otherFingers(1);
+		glPopMatrix();
+
+		//Middle Finger
+		glPushMatrix();
+		glTranslatef(0.07, 0, 0.05);
+		otherFingers(1);
+		glPopMatrix();
+
+		//Ring Finger
+		glPushMatrix();
+		glTranslatef(0.07, 0, 0.1);
+		otherFingers(1);
+		glPopMatrix();
+
+		//Little Finger/ Pinky
+		glPushMatrix();
+		glTranslatef(0.07, 0, 0.15);
+		otherFingers(1);
+		glPopMatrix();
+	}
+	else {
+		/* Left Hand */
+		//Thumb Finger
+		thumbFingers();
+
+		//Index Finger
+		glPushMatrix();
+		glTranslatef(0, 0, 0);
+		otherFingers(2);
+		glPopMatrix();
+
+		//Middle Finger
+		glPushMatrix();
+		glTranslatef(0, 0, 0.05);
+		otherFingers(2);
+		glPopMatrix();
+
+		//Ring Finger
+		glPushMatrix();
+		glTranslatef(0, 0, 0.1);
+		otherFingers(2);
+		glPopMatrix();
+
+		//Little Finger/ Pinky
+		glPushMatrix();
+		glTranslatef(0, 0, 0.15);
+		otherFingers(2);
+		glPopMatrix();
+	}
+
+
 }
 
 void backArmor1() {
@@ -3484,9 +4161,10 @@ void backArmor4() {
 	glVertex3f(0.25, 1.0, 0.35);
 	glVertex3f(0.35, 1.0, 0.35);
 	glEnd();
-	
+
 	glColor3f(1, 1, 1);
 }
+
 void gun()
 {
 	GLUquadricObj* guncylinder = NULL;
@@ -4260,6 +4938,7 @@ void gun()
 
 
 }
+
 void blade()
 {
 	glColor3f(1.0, 0.0, 0.0);
@@ -4543,10 +5222,8 @@ void blade()
 	glVertex3f(-1.42, -0.3, 0.0);
 	glVertex3f(-1.48, -0.3, 0.0);
 	glEnd();
-
-
-
 }
+
 void optimusPrime()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -4555,6 +5232,7 @@ void optimusPrime()
 
 	glMatrixMode(GL_MODELVIEW);
 	/////////////////////////////////// ONE AND ONLY ONE /////////////////////////////////////
+
 	butt();
 	buttArmor1();
 	buttArmor2();
@@ -4572,6 +5250,7 @@ void optimusPrime()
 	backArmor4();
 	blade();
 	gun();
+
 	/////////////////////////////// LEFT PART FROM SCREEN VIEW ///////////////////////////////
 	leg();
 	shoePart1();
@@ -4587,6 +5266,12 @@ void optimusPrime()
 	thighArmor2();
 	thighArmor3();
 	thighArmor4();
+
+	glPushMatrix();
+	glTranslatef(0, 1.27, 0.1);
+	glRotatef(leftWholeArmSpeed, 1, 0, 0);
+	glTranslatef(0, -1.27, -0.1);
+
 	upperArmJoint();
 	upperArm();
 	armMuscle1();
@@ -4602,7 +5287,9 @@ void optimusPrime()
 	lowerArm();
 	lowerArmArmor1();
 	lowerArmArmor2();
-	hand();
+	hand(0);
+	glPopMatrix();
+
 	glPopMatrix();
 
 	/////////////////////////////// RIGHT PART FROM SCREEN VIEW ///////////////////////////////
@@ -4619,18 +5306,47 @@ void optimusPrime()
 	thighArmor4();
 	glPopMatrix();
 
+
+	glPushMatrix();
+	glTranslatef(0, 1.27, 0.1);
+	glRotatef(rightWholeArmSpeed, 1, 0, 0);
+	glTranslatef(0, -1.27, -0.1);
+
+
+	glPushMatrix();
+	glRotatef(180, 0, 1, 0);
+
+	/* Due to not symmetric, translate it to make it symmetric */
+	glPushMatrix();
+	glTranslatef(0, 0, -0.2);
+	upperArm();
+	armMuscle1();
+	armMuscle2();
+	armAntenna();
+	muscleLowerArmJoint();
+	glPopMatrix();
+
+	/* Due to not symmetric, translate it to make it symmetric */
+	glPushMatrix();
+	glTranslatef(0, 0, -0.1);
+	upperArmJoint();
+	glPopMatrix();
+	glPopMatrix();
+
 	/* Translate Lower Arm & Hand To The Right Part */
 	glPushMatrix();
 	glTranslatef(1.16, 0, 0);
-		glPushMatrix();
-		glTranslatef(0, 0.65, 0.15);
-		glRotatef(rightArmUpSpeed, 1, 0, 0);
-		glTranslatef(0, -0.65, -0.15);
-		lowerArm();
-		lowerArmArmor1();
-		lowerArmArmor2();
-		hand();
-		glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0, 0.65, 0.15);
+	glRotatef(rightArmUpSpeed, 1, 0, 0);
+	glTranslatef(0, -0.65, -0.15);
+	lowerArm();
+	lowerArmArmor1();
+	lowerArmArmor2();
+	hand(1);
+	glPopMatrix();
+	glPopMatrix();
+
 	glPopMatrix();
 
 	/* Translate Leg Armor 2 To The Right Part */
@@ -4655,19 +5371,8 @@ void optimusPrime()
 
 	/* Due to not symmetric, translate it to make it symmetric */
 	glPushMatrix();
-	glTranslatef(0, 0, -0.1);
-	upperArmJoint();
-	glPopMatrix();
-
-	/* Due to not symmetric, translate it to make it symmetric */
-	glPushMatrix();
 	glTranslatef(0, 0, -0.2);
-	upperArm();
-	armMuscle1();
-	armMuscle2();
 	legTyre();
-	armAntenna();
-	muscleLowerArmJoint();
 	glPopMatrix();
 
 	glPopMatrix();
@@ -4714,7 +5419,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
-	
+
 	glScalef(0.4, 0.4, 0.4);
 	while (true)
 	{
@@ -4725,30 +5430,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+
 		glMatrixMode(GL_PROJECTION);
 		//gluPerspective(30, 0.5, 0.1, 100);
 		//glFrustum(5, -5, -5, 5, 2, 10);
 		glOrtho(-3, 3, -3, 3, -10, 10);
 		glLoadIdentity();
-		glTranslatef(x, y, z);
-		if (leftArmUpStatus == 1) {
-			leftArmUpSpeed += 0.01;
-
-			if (leftArmUpSpeed >= 90) {
-				leftArmUpSpeed = 90;
-				leftArmUpStatus = 0;
-			}
-		}
-
-		if (rightArmUpStatus == 1) {
-			rightArmUpSpeed += 0.01;
-
-			if (rightArmUpSpeed >= 90) {
-				rightArmUpSpeed = 90;
-				rightArmUpStatus = 0;
-			}
-		}
-
+		glTranslatef(-x, -y, -z);
 
 
 		optimusPrime();
