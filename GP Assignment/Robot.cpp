@@ -267,6 +267,12 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 
 		}
+		else if (wParam == 'Z')
+			goPerspective = true;
+		else if (wParam == 'X')
+			goOrtho = true;
+		else if (wParam == 'C')
+			goBackOrigin = true;
 		break;
 
 	case WM_MOUSEWHEEL:
@@ -6257,34 +6263,34 @@ void background() {
 
 	//Front
 	glBegin(GL_POLYGON);
-	glTexCoord2f(1, 1); glVertex3f(-50, 50, -50);
-	glTexCoord2f(0, 1); glVertex3f(50, 50, -50);
-	glTexCoord2f(0, 0); glVertex3f(50, -2, -50);
-	glTexCoord2f(1, 0); glVertex3f(-50, -2, -50);
+	glTexCoord2f(1, 1); glVertex3f(-10, 10, -10);
+	glTexCoord2f(0, 1); glVertex3f(10, 10, -10);
+	glTexCoord2f(0, 0); glVertex3f(10, -2, -10);
+	glTexCoord2f(1, 0); glVertex3f(-10, -2, -10);
 	glEnd();
 
 	//Left
 	glBegin(GL_POLYGON);
-	glTexCoord2f(1, 0); glVertex3f(-50, -2, -50);
-	glTexCoord2f(0, 0); glVertex3f(-50, -2, 50);
-	glTexCoord2f(0, 1); glVertex3f(-50, 50, 50);
-	glTexCoord2f(1, 1); glVertex3f(-50, 50, -50);
+	glTexCoord2f(1, 0); glVertex3f(-10, -2, -10);
+	glTexCoord2f(0, 0); glVertex3f(-10, -2, 10);
+	glTexCoord2f(0, 1); glVertex3f(-10, 10, 10);
+	glTexCoord2f(1, 1); glVertex3f(-10, 10, -10);
 	glEnd();
 
 	//Right
 	glBegin(GL_POLYGON);
-	glTexCoord2f(0, 1); glVertex3f(50, 50, -50);
-	glTexCoord2f(1, 1); glVertex3f(50, 50, 50);
-	glTexCoord2f(1, 0); glVertex3f(50, -2, 50);
-	glTexCoord2f(0, 0); glVertex3f(50, -2, -50);
+	glTexCoord2f(0, 1); glVertex3f(10, 10, -10);
+	glTexCoord2f(1, 1); glVertex3f(10, 10, 10);
+	glTexCoord2f(1, 0); glVertex3f(10, -2, 10);
+	glTexCoord2f(0, 0); glVertex3f(10, -2, -10);
 	glEnd();
 
 	//Back
 	glBegin(GL_POLYGON);
-	glTexCoord2f(1, 0); glVertex3f(50, -2, 50);
-	glTexCoord2f(0, 0); glVertex3f(-50, -2, 50);
-	glTexCoord2f(0, 1); glVertex3f(-50, 50, 50);
-	glTexCoord2f(1, 1); glVertex3f(50, 50, 50);
+	glTexCoord2f(1, 0); glVertex3f(10, -2, 10);
+	glTexCoord2f(0, 0); glVertex3f(-10, -2, 10);
+	glTexCoord2f(0, 1); glVertex3f(-10, 10, 10);
+	glTexCoord2f(1, 1); glVertex3f(10, 10, 10);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -6307,10 +6313,10 @@ void background() {
 
 	//Top
 	glBegin(GL_POLYGON);
-	glTexCoord2f(0, 0); glVertex3f(-50, 50, -50);
-	glTexCoord2f(0, 1); glVertex3f(-50, 50, 50);
-	glTexCoord2f(1, 1); glVertex3f(50, 50, 50);
-	glTexCoord2f(1, 0); glVertex3f(50, 50, -50);
+	glTexCoord2f(0, 0); glVertex3f(-10, 10, -10);
+	glTexCoord2f(0, 1); glVertex3f(-10, 10, 10);
+	glTexCoord2f(1, 1); glVertex3f(10, 10, 10);
+	glTexCoord2f(1, 0); glVertex3f(10, 10, -10);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -6333,10 +6339,10 @@ void background() {
 
 	//Bottom
 	glBegin(GL_POLYGON);
-	glTexCoord2f(1, 1); glVertex3f(50, -2, -50);
-	glTexCoord2f(1, 0); glVertex3f(-50, -2, -50);
-	glTexCoord2f(0, 0); glVertex3f(-50, -2, 50);
-	glTexCoord2f(0, 1); glVertex3f(50, -2, 50);
+	glTexCoord2f(1, 1); glVertex3f(10, -2, -10);
+	glTexCoord2f(1, 0); glVertex3f(-10, -2, -10);
+	glTexCoord2f(0, 0); glVertex3f(-10, -2, 10);
+	glTexCoord2f(0, 1); glVertex3f(10, -2, 10);
 	glEnd();
 	
 	glDisable(GL_TEXTURE_2D);
@@ -6633,16 +6639,16 @@ void optimusPrime()
 void goPerspectiveView() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glScalef(0.5, 0.5, 0.5);
-	gluPerspective(60.0, 1.0, 1, 100);
-	glFrustum(-1, 1, -1, 1, 1, 100);
+	glScalef(0.4, 0.4, 0.4);
+	gluPerspective(30.0, 1.0, 0.5, 20);
+	glFrustum(-2, 2, -2, 2, 1, 20);
 }
 
 void goOrthoView() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glScalef(0.5, 0.5, 0.5);
-	glOrtho(-1, 1, -1, 1, 1, 100);
+	//glScalef(0.4, 0.4, 0.4);
+	glOrtho(-2, 2, -1, 3, 1, -10);
 }
 
 void goBackOriginView() {
@@ -6708,18 +6714,23 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 			DispatchMessage(&msg);
 		}
 		
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glScalef(0.4, 0.4, 0.4);
-		gluPerspective(30.0, 1.0, 0.5, 20);
-		glFrustum(-2, 2, -2, 2, 1, 20);
-		
-		//glMatrixMode(GL_PROJECTION);
-		//gluPerspective(60, 1, 1, 100);
-		//glFrustum(-1, 1, -1, 1, 1, 10);
-		//glOrtho(-3, 3, -3, 3, -10, 10);
-		//glLoadIdentity();
-		//glTranslatef(x, y, z);
+		if (goPerspective)
+		{
+			goPerspectiveView();
+			goPerspective = false;
+		}
+
+		if (goOrtho)
+		{
+			goOrthoView();
+			goOrtho = false;
+		}
+
+		if (goBackOrigin) {
+			goBackOriginView();
+			goBackOrigin = false;
+		}
+
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClearColor(0.53, 0.81, 0.92, 0);
