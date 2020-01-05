@@ -796,41 +796,75 @@ void legArmor4() {
 }
 
 void legTyre() {
-	//Tyre Above 
+	/* Texture */
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
+		"rim.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
+		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+	//Rim Above 
 	glBegin(GL_POLYGON);
 	for (int i = 0; i <= 360; i++)
 	{
 		float degInRad = i * (3.14159 / 180);
-		glColor3f(0, 0, 0);
+		glTexCoord2f((cos(degInRad)*(0.15 - 0.02)) + 0.1, (sin(degInRad)*(0.15 + 0.05)) - 1.3);
 		glVertex3f(-0.45, (sin(degInRad)*(0.15 + 0.05)) - 1.3, (cos(degInRad)*(0.15 - 0.02)) + 0.1);
 	}
 	glEnd();
 
-	glColor3f(1, 1, 1);
-	GLUquadricObj *legTyre1 = NULL;
-	legTyre1 = gluNewQuadric();
-
-	glPushMatrix();
-	glTranslatef(-0.45, -1.3, 0.1);
-	glScalef(1, 1, 0.65);
-	glRotatef(90, 0, 1, 0);
-	gluQuadricDrawStyle(legTyre1, GLU_LINE);
-	gluCylinder(legTyre1, 0.2, 0.2, 0.15, 20, 20);
-	gluDeleteQuadric(legTyre1);
-	glPopMatrix();
-
-
-	//Tyre Below 
+	//Rim Below
 	glBegin(GL_POLYGON);
 	for (int i = 0; i <= 360; i++)
 	{
 		float degInRad = i * (3.14159 / 180);
-		glColor3f(0, 0, 0);
+		glTexCoord2f((cos(degInRad)*(0.15 - 0.02)) + 0.1, (sin(degInRad)*(0.15 + 0.05)) - 1.75);
 		glVertex3f(-0.45, (sin(degInRad)*(0.15 + 0.05)) - 1.75, (cos(degInRad)*(0.15 - 0.02)) + 0.1);
 	}
 	glEnd();
 
-	glColor3f(1, 1, 1);
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
+	/* Texture */
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
+		"tyre.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
+		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	
+	GLUquadricObj *legTyre1 = NULL;
+	legTyre1 = gluNewQuadric();
+
+	//Tyre Above
+	glPushMatrix();
+	glTranslatef(-0.45, -1.3, 0.1);
+	glScalef(1, 1, 0.65);
+	glRotatef(90, 0, 1, 0);
+	gluQuadricDrawStyle(legTyre1, GLU_FILL);
+	gluQuadricTexture(legTyre1, true);
+	gluCylinder(legTyre1, 0.2, 0.2, 0.15, 20, 20);
+	gluDeleteQuadric(legTyre1);
+	glPopMatrix();
+
+	//Tyre Below 
 	GLUquadricObj *legTyre2 = NULL;
 	legTyre2 = gluNewQuadric();
 
@@ -838,10 +872,15 @@ void legTyre() {
 	glTranslatef(-0.45, -1.75, 0.1);
 	glScalef(1, 1, 0.65);
 	glRotatef(90, 0, 1, 0);
-	gluQuadricDrawStyle(legTyre2, GLU_LINE);
+	gluQuadricDrawStyle(legTyre2, GLU_FILL);
+	gluQuadricTexture(legTyre2, true);
 	gluCylinder(legTyre2, 0.2, 0.2, 0.15, 20, 20);
 	gluDeleteQuadric(legTyre2);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 }
 
 void leg() {
@@ -1900,57 +1939,72 @@ void chestMirrorFrameSide() {
 }
 
 void chestMirror() {
-	glColor3f(0.53, 0.81, 0.92);
+	/* Texture */
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
+		"windshield.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
+		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
 
 	//Front
 	glBegin(GL_POLYGON);
-	glVertex3f(-0.35, 1.35, -0.31);
-	glVertex3f(-0.05, 1.35, -0.31);
-	glVertex3f(-0.05, 1.05, -0.31);
-	glVertex3f(-0.35, 1.05, -0.31);
+	glTexCoord2f(0, 1);	glVertex3f(-0.35, 1.35, -0.31);
+	glTexCoord2f(1, 1); glVertex3f(-0.05, 1.35, -0.31);
+	glTexCoord2f(1, 0); glVertex3f(-0.05, 1.05, -0.31);
+	glTexCoord2f(0, 0); glVertex3f(-0.35, 1.05, -0.31);
 	glEnd();
 
 	//Left
 	glBegin(GL_POLYGON);
-	glVertex3f(-0.35, 1.05, -0.31);
-	glVertex3f(-0.35, 1.05, -0.29);
-	glVertex3f(-0.35, 1.35, -0.29);
-	glVertex3f(-0.35, 1.35, -0.31);
+	glTexCoord2f(0, 1); glVertex3f(-0.35, 1.05, -0.31);
+	glTexCoord2f(1, 1); glVertex3f(-0.35, 1.05, -0.29);
+	glTexCoord2f(1, 0); glVertex3f(-0.35, 1.35, -0.29);
+	glTexCoord2f(0, 0); glVertex3f(-0.35, 1.35, -0.31);
 	glEnd();
 
 	//Top
 	glBegin(GL_POLYGON);
-	glVertex3f(-0.35, 1.35, -0.31);
-	glVertex3f(-0.35, 1.35, -0.29);
-	glVertex3f(-0.05, 1.35, -0.29);
-	glVertex3f(-0.05, 1.35, -0.31);
+	glTexCoord2f(0, 1); glVertex3f(-0.35, 1.35, -0.31);
+	glTexCoord2f(1, 1); glVertex3f(-0.35, 1.35, -0.29);
+	glTexCoord2f(1, 0); glVertex3f(-0.05, 1.35, -0.29);
+	glTexCoord2f(0, 0); glVertex3f(-0.05, 1.35, -0.31);
 	glEnd();
 
 	//Right
 	glBegin(GL_POLYGON);
-	glVertex3f(-0.05, 1.35, -0.31);
-	glVertex3f(-0.05, 1.35, -0.29);
-	glVertex3f(-0.05, 1.05, -0.29);
-	glVertex3f(-0.05, 1.05, -0.31);
+	glTexCoord2f(0, 1); glVertex3f(-0.05, 1.35, -0.31);
+	glTexCoord2f(1, 1); glVertex3f(-0.05, 1.35, -0.29);
+	glTexCoord2f(1, 0); glVertex3f(-0.05, 1.05, -0.29);
+	glTexCoord2f(0, 0); glVertex3f(-0.05, 1.05, -0.31);
 	glEnd();
 
 	//Bottom
 	glBegin(GL_POLYGON);
-	glVertex3f(-0.05, 1.05, -0.31);
-	glVertex3f(-0.35, 1.05, -0.31);
-	glVertex3f(-0.35, 1.05, -0.29);
-	glVertex3f(-0.05, 1.05, -0.29);
+	glTexCoord2f(0, 1); glVertex3f(-0.05, 1.05, -0.31);
+	glTexCoord2f(1, 1); glVertex3f(-0.35, 1.05, -0.31);
+	glTexCoord2f(1, 0); glVertex3f(-0.35, 1.05, -0.29);
+	glTexCoord2f(0, 0); glVertex3f(-0.05, 1.05, -0.29);
 	glEnd();
 
 	//Back
 	glBegin(GL_POLYGON);
-	glVertex3f(-0.05, 1.05, -0.29);
-	glVertex3f(-0.35, 1.05, -0.29);
-	glVertex3f(-0.35, 1.35, -0.29);
-	glVertex3f(-0.05, 1.35, -0.29);
+	glTexCoord2f(0, 1); glVertex3f(-0.05, 1.05, -0.29);
+	glTexCoord2f(1, 1); glVertex3f(-0.35, 1.05, -0.29);
+	glTexCoord2f(1, 0); glVertex3f(-0.35, 1.35, -0.29);
+	glTexCoord2f(0, 0); glVertex3f(-0.05, 1.35, -0.29);
 	glEnd();
 
-	glColor3f(1, 1, 1);
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 }
 
 void chestMirrorFrame() {
@@ -5009,6 +5063,7 @@ void gun()
 
 
 }
+
 void blade()
 {
 	if (bladelocation < 0.2)
@@ -5324,6 +5379,7 @@ void bullet()
 	gluDeleteQuadric(bullet);
 	glPopMatrix();
 }
+
 void optimusPrime()
 {
 	
