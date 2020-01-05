@@ -20,7 +20,7 @@ GLuint texture = 0;
 int leftOrRight = 0; /* [None - 0] [Left - 1]  [Right - 2] */
 
 //for gun
-bool backNormal = false;
+int backNormal = 0;
 bool drawGun = false;
 int stepcounter = 0;
 bool drawBlade = false;
@@ -30,12 +30,18 @@ float amb[] = { 0.93,0.44,0.12 };
 float pos[] = { 0.0,1.0,0.0 };
 float firebullet = 0.0;
 //============================
+int lightmode = 0;
 //for blade
-float bladesize = 0.6;
+int swingBlade = 0;
+float bladesize = 0.3;
 float bladelocation = -1.2;
 /* Whole Arm Up And Down Speed*/
 float leftWholeArmSpeed = 0.0;
 float rightWholeArmSpeed = 0.0;
+
+float spec[] = { 0.41,0.96,0.85 };
+
+float specpos[] = {-0.35,1.35,-0.31};
 
 /* Arm Up And Down Speed */
 float leftArmUpSpeed = 0.0;
@@ -89,13 +95,21 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		else if (wParam == 'M')
 			leftOrRight = 2;
 		else if (wParam == 'F')
-			trigger = true;
+		{
+			if (drawGun == true)
+				trigger = true;
+
+		}
+			
 		else if (wParam == 'T')
 			turnrate += 90;
 		else if (wParam == 'Y')
 			turnrate -= 90;
+		else if (wParam == 'K')
+			swingBlade = 1;
+		
 		else if (wParam == 'G')
-			drawGun = true;
+			if (drawGun == false)drawGun = true; else drawGun = false;
 		else if (wParam == 'B')
 		{
 			if (drawBlade == false)drawBlade = true; else drawBlade = false;
@@ -1909,8 +1923,9 @@ void chestMirrorFrameSide() {
 }
 
 void chestMirror() {
+	
 	glColor3f(0.53, 0.81, 0.92);
-
+	
 	//Front
 	glBegin(GL_POLYGON);
 	glVertex3f(-0.35, 1.35, -0.31);
@@ -1960,6 +1975,7 @@ void chestMirror() {
 	glEnd();
 
 	glColor3f(1, 1, 1);
+	
 }
 
 void chestMirrorFrame() {
@@ -1973,14 +1989,22 @@ void chestMirrorFrame() {
 
 	//Left Frame
 	chestMirrorFrameSide();
+
+
 	chestMirror();
+
+
 
 	//Right Frame
 	glPushMatrix();
 	glTranslatef(0.4, 0, 0);
-	chestMirrorFrameSide();
+
 	chestMirror();
+
+	chestMirrorFrameSide();
 	glPopMatrix();
+
+
 }
 
 void chestArmor1() {
@@ -4222,7 +4246,8 @@ void gun()
 		glEnable(GL_LIGHTING);
 
 		glLightfv(GL_LIGHT1, GL_AMBIENT, amb);
-		glLightfv(GL_LIGHT1, GL_POSITION, pos);
+		glLightfv(GL_LIGHT1, GL_POSITION, pos); 
+
 		glEnable(GL_LIGHT1);
 	}
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
@@ -5453,6 +5478,7 @@ void bullet()
 void optimusPrime()
 {
 
+
 	/////////////////////////////////// ONE AND ONLY ONE /////////////////////////////////////
 
 	butt();
@@ -5528,9 +5554,13 @@ void optimusPrime()
 	glScalef(0.6, 1.0, 0.7);
 	glRotatef(270, 0, 1, 0);
 	glRotatef(90, 0, 0, 1);
-	glTranslatef(-2.4 + x, -0.6 + y, 0.9 + z);
-	if(usegun==true)
-		gun();
+	glTranslatef(-2.3, -0.6, 1.0);
+	if (usegun == true)
+	{
+		gun(); 
+		leftUpperFingerDegree = 90;
+		leftMiddleFingerDegree = 90;
+	}
 	if (trigger == true)
 	{
 		glPushMatrix();
@@ -5618,6 +5648,7 @@ void optimusPrime()
 	glTranslatef(1.16, 0, 0);
 	glPushMatrix();
 	glTranslatef(0, 0.65, 0.15);
+
 	glRotatef(rightArmUpSpeed, 1, 0, 0);
 	glTranslatef(0, -0.65, -0.15);
 
@@ -5628,7 +5659,7 @@ void optimusPrime()
 	glPopMatrix();
 	glPopMatrix();
 	glPushMatrix();
-	glScalef(1.0, 0.5, 1.0);
+	//glScalef(1.0, 0.5, 1.0);
 	glTranslatef(0, 0.65, 0.15);
 	glRotatef(rightArmUpSpeed, 1, 0, 0);
 	glTranslatef(0, -0.65, -0.15);
@@ -5637,6 +5668,7 @@ void optimusPrime()
 	{
 		glPushMatrix();
 		glRotatef(180, 1.0, 0.0, 0.0);
+		glRotatef(90, 0.0, 1.0, 0.0);
 		if (bladelocation <= 0.2)
 		{
 			bladelocation += 0.01;
@@ -5644,7 +5676,7 @@ void optimusPrime()
 			
 		}
 		glScalef(1.0, bladesize, 1.0);
-		glTranslatef(2.1, bladelocation, 0.0);
+		glTranslatef(1.6+x, bladelocation, 0.7+z);
 		if (bladelocation >= 0.2) //blade fully extend only show fire
 		{
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
@@ -5679,6 +5711,7 @@ void optimusPrime()
 	{
 		glPushMatrix();
 		glRotatef(180, 1.0, 0.0, 0.0);
+		glRotatef(90, 0.0, 1.0, 0.0);
 		if (bladelocation >= -1.2)
 		{
 			bladelocation -= 0.01;
@@ -5686,7 +5719,7 @@ void optimusPrime()
 
 		}
 		glScalef(1.0, bladesize, 1.0);
-		glTranslatef(2.1, bladelocation, -0.1);
+		glTranslatef(1.6 + x, bladelocation, 0.65 + z);
 
 		blade();
 
@@ -5748,7 +5781,7 @@ void optimusPrime()
 	glTranslatef(-1.1, -1.7, 0.9);
 
 
-	if (drawGun == true&&backNormal==false)
+	if (drawGun == true&&backNormal==0)
 	{
 		if (leftWholeArmSpeed <= 200)
 		{
@@ -5761,12 +5794,12 @@ void optimusPrime()
 		if (leftWholeArmSpeed > 200 && leftArmUpSpeed > 115)
 		{
 			usegun = true;
-			backNormal = true;
+			backNormal = 1;
 		
 		}
 	}
-
-	if (drawGun == false && backNormal == false)
+	
+	if (drawGun == false && backNormal == 2)
 	{
 		if (leftWholeArmSpeed <= 200)
 		{
@@ -5778,13 +5811,13 @@ void optimusPrime()
 		}
 		if (leftWholeArmSpeed > 200 && leftArmUpSpeed > 115)
 		{
-			usegun = true;
-			backNormal = true;
+			usegun = false;
+			backNormal = 3;
 
 		}
 	}
-
-	if (backNormal == true)
+	
+	if (backNormal == 1)
 	{
 		if (leftWholeArmSpeed >= 45)
 		{
@@ -5794,9 +5827,32 @@ void optimusPrime()
 		{
 			leftArmUpSpeed--;
 		}
+		if (leftWholeArmSpeed < 45 && leftArmUpSpeed < 45)
+			backNormal = 2;
+		
 	}
-	if(usegun==false)
-	gun();
+
+	if (backNormal == 3)
+	{
+		if (leftWholeArmSpeed >= 0)
+		{
+			leftWholeArmSpeed--;
+		}
+		if (leftArmUpSpeed >= 0)
+		{
+			leftArmUpSpeed--;
+		}
+		if (leftWholeArmSpeed < 0 && leftArmUpSpeed < 0)
+			backNormal = 0;
+
+	}
+
+	if (usegun == false)
+	{
+		leftUpperFingerDegree = 30;
+		leftMiddleFingerDegree = 30;
+		gun();
+	}
 
 
 	
@@ -5804,6 +5860,44 @@ void optimusPrime()
 
 
 	glPopMatrix();
+
+	if (swingBlade == 1&&drawBlade==true)
+	{
+		if(rightWholeArmSpeed<=90)
+		{ 
+			rightWholeArmSpeed++;			
+		}
+		if (rightWholeArmSpeed >= 90)
+			swingBlade++;
+	}
+	if (swingBlade == 2 && drawBlade == true)
+	{
+		if (rightWholeArmSpeed >= 45)
+		{
+			rightWholeArmSpeed--;
+			
+		}
+		if (rightArmUpSpeed <= 90)
+		{
+			rightArmUpSpeed++;
+		}
+		if ((rightWholeArmSpeed < 45) && (rightArmUpSpeed > 90))
+			swingBlade++;
+	}
+	if (swingBlade == 3 && drawBlade == true)
+	{
+		if (rightWholeArmSpeed >= 0)
+		{
+			rightWholeArmSpeed--;
+		
+		}
+		if (rightArmUpSpeed > 0)
+		{
+			rightArmUpSpeed--;
+		}
+		if ((rightWholeArmSpeed < 0) && (rightArmUpSpeed < 0))
+			swingBlade = 4;
+	}
 }
 //--------------------------------------------------------------------
 
