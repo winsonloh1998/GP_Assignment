@@ -4216,35 +4216,9 @@ void gun()
 		glLightfv(GL_LIGHT1, GL_POSITION, pos);
 		glEnable(GL_LIGHT1);
 	}
-	glPushMatrix();
-	glTranslatef(0.95, 1, 0);
-	glRotatef(90, 0, 1, 0);
-	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
-	gluCylinder(guncylinder, 0.05, 0.1, 0.05, 30, 30);
-	gluDeleteQuadric(guncylinder);
-	glPopMatrix();
-	if (trigger == true)
-	{
-		glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
-		glDisable(GL_LIGHT1);
-		glDisable(GL_LIGHTING);
-	}
-	//gunpart 1 
-
-	glPushMatrix();
-	glTranslatef(1, 1, 0);
-	glRotatef(90, 0, 1, 0);
-
-	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
-	gluCylinder(guncylinder, 0.1, 0.1, 0.3, 30, 30);
-	gluDeleteQuadric(guncylinder);
-	glPopMatrix();
-	//gun part 2 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "flameblade.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "metal.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
 
@@ -4256,12 +4230,58 @@ void gun()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
 	glPushMatrix();
+	glTranslatef(0.95, 1, 0);
+	glRotatef(90, 0, 1, 0);
+	guncylinder = gluNewQuadric();
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.05, 0.1, 0.05, 30, 30);
+	gluDeleteQuadric(guncylinder);
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+	glPopMatrix();
+	if (trigger == true)
+	{
+		glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
+		glDisable(GL_LIGHT1);
+		glDisable(GL_LIGHTING);
+	}
+	//gunpart 1 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "metal1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	glPushMatrix();
+	glTranslatef(1, 1, 0);
+	glRotatef(90, 0, 1, 0);
+
+	guncylinder = gluNewQuadric();
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.1, 0.1, 0.3, 30, 30);
+
+	gluDeleteQuadric(guncylinder);
+	glPopMatrix();
+	//gun part 2 
+	
+	glPushMatrix();
 	glTranslatef(1.4, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
 	gluQuadricDrawStyle(guncylinder, GLU_FILL);
-	gluCylinder(guncylinder, 0.1, 0.1, 0.3, 30, 30);
 	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.1, 0.1, 0.3, 30, 30);
+	
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
 
@@ -4269,6 +4289,7 @@ void gun()
 	DeleteObject(hBMP);
 	glDeleteTextures(1, &texture);
 	//gun part 2 upper
+	glColor3f(0.59,0.04,0.04);
 	glBegin(GL_POLYGON);
 	glVertex3f(1.4, 1.1, 0);
 	glVertex3f(1.43, 1.15, 0);
@@ -4346,10 +4367,10 @@ void gun()
 	glVertex3f(1.7, 1.1, 0.027);
 	glVertex3f(1.7, 1.1, -0.02);
 	glEnd();
-
+	glColor3f(1.0, 1.0, 1.0);
 	//===============
 	//gun handle part 2
-
+	glColor3f(1.0, 0.25, 0.1);
 	glBegin(GL_POLYGON);
 	glVertex3f(1.5, 0.9, -0.05);
 	glVertex3f(1.55, 0.9, -0.05);
@@ -4420,8 +4441,9 @@ void gun()
 	glVertex3f(1.55, 0.8, 0.05);
 	glVertex3f(1.5, 0.8, 0.05);
 	glEnd();
-
+	glColor3f(1.0, 1.0, 1.0);
 	//angled grip
+	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(1.55, 0.86, -0.025);
 	glVertex3f(1.65, 0.86, -0.025);
@@ -4463,6 +4485,7 @@ void gun()
 	glVertex3f(1.65, 0.86, 0.0);
 	glVertex3f(1.65, 0.85, 0.0);
 	glEnd();
+
 	//..... xie mian
 	glBegin(GL_POLYGON);
 	glVertex3f(1.65, 0.85, -0.025);
@@ -4589,6 +4612,7 @@ void gun()
 	glVertex3f(1.64, 0.86, 0.0);
 	glVertex3f(1.64, 0.86, -0.025);
 	glEnd();
+
 	//......
 	//laser
 	glPushMatrix();
@@ -4599,15 +4623,29 @@ void gun()
 	gluCylinder(guncylinder, 0.01, 0.01, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
-
+	glColor3f(1.0, 1.0, 1.0);
 	//=====================================		
 
-			//gunpart2 connector
+	//gunpart2 connector
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "metal.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
 	glPushMatrix();
 	glTranslatef(1.3, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
 	gluCylinder(guncylinder, 0.1, 0.05, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
@@ -4616,7 +4654,8 @@ void gun()
 	glTranslatef(1.35, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
 	gluCylinder(guncylinder, 0.05, 0.1, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
@@ -4628,6 +4667,8 @@ void gun()
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
 	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricTexture(guncylinder, true);
+
 	gluCylinder(guncylinder, 0.1, 0.05, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
@@ -4636,21 +4677,66 @@ void gun()
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
 	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricTexture(guncylinder,true);
 	gluCylinder(guncylinder, 0.05, 0.2, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
-
-	//gunpart 3
+	//gun part 4 connector
 	glPushMatrix();
-	glTranslatef(1.8, 1, 0);
+	glTranslatef(2.08, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
 	gluQuadricDrawStyle(guncylinder, GLU_LINE);
-	gluCylinder(guncylinder, 0.2, 0.2, 0.3, 30, 30);
+	gluQuadricTexture(guncylinder, true);
+
+	gluCylinder(guncylinder, 0.2, 0.25, 0.02, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(1.75, 1, 0);
+	glRotatef(90, 0, 1, 0);
+	guncylinder = gluNewQuadric();
+	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.05, 0.2, 0.05, 30, 30);
+	gluDeleteQuadric(guncylinder);
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+	//gunpart 3
+	
+
+	glPushMatrix();
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "gunskin.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	glTranslatef(1.8, 1, 0);
+	glRotatef(90, 0, 1, 0);
+	guncylinder = gluNewQuadric();
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.2, 0.2, 0.3, 30, 30);
+	
+	gluDeleteQuadric(guncylinder);
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+	glPopMatrix();
+
+
 	//handle part 3 
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(0.5, 0.09, 0.03);
 	glBegin(GL_POLYGON);
 	glVertex3f(1.9, 0.8, -0.05);
 	glVertex3f(2.0, 0.8, -0.05);
@@ -4671,6 +4757,7 @@ void gun()
 	glEnd();
 
 	glBegin(GL_POLYGON);
+	
 	glVertex3f(1.9, 0.6, -0.05);
 	glVertex3f(2.0, 0.6, -0.05);
 	glVertex3f(2.0, 0.65, -0.05);
@@ -4734,13 +4821,31 @@ void gun()
 
 		//gun part 4 
 	glPushMatrix();
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "gunskin.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
 	glTranslatef(2.1, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
 	gluCylinder(guncylinder, 0.25, 0.25, 0.2, 30, 30);
 	gluDeleteQuadric(guncylinder);
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 	glPopMatrix();
+
 	//handle part4 
 	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
@@ -4871,14 +4976,6 @@ void gun()
 	glEnd();
 	//gun tail
 //==========================================
-	/*
-	glBegin(GL_POLYGON);
-	glVertex3f(2.3,0.75,-0.25);
-	glVertex3f(2.5, 0.75, -0.25);
-	glVertex3f(2.5, 1.3, -0.25);
-	glVertex3f(2.3, 1.4, -0.25);
-	glEnd();
-	*/
 	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(2.3, 1.3, -0.25);
@@ -4952,28 +5049,43 @@ void gun()
 	glVertex3f(2.5, 0.75, -0.25);
 	glEnd();
 	glColor3f(1.0, 1.0, 1.0);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "guntail.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+	
 
 
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.3, 0.75, 0.25);
-	glVertex3f(2.5, 0.75, 0.25);
-	glVertex3f(2.5, 1.3, 0.25);
-	glVertex3f(2.3, 1.4, 0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.3, 0.75, 0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.5, 0.75, 0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.5, 1.3, 0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.3, 1.4, 0.25);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.5, 0.75, -0.25);
-	glVertex3f(2.5, 0.75, 0.25);
-	glVertex3f(2.5, 1.30, 0.25);
-	glVertex3f(2.5, 1.30, -0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.5, 0.75, -0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.5, 0.75, 0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.5, 1.30, 0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.5, 1.30, -0.25);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.3, 1.4, -0.25);
-	glVertex3f(2.3, 1.4, 0.25);
-	glVertex3f(2.5, 1.30, 0.25);
-	glVertex3f(2.5, 1.30, -0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.3, 1.4, -0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.3, 1.4, 0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.5, 1.30, 0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.5, 1.30, -0.25);
 	glEnd();
 
 	glBegin(GL_LINE_LOOP);
@@ -4988,21 +5100,24 @@ void gun()
 
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.3, 0.75, -0.25);
-	glVertex3f(2.3, 1.4, -0.25);
-	glVertex3f(2.3, 1.4, 0.25);
-	glVertex3f(2.3, 0.75, 0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.3, 0.75, -0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.3, 1.4, -0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.3, 1.4, 0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.3, 0.75, 0.25);
 
 	glEnd();
 
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.3, 0.75, -0.25);
-	glVertex3f(2.5, 0.75, -0.25);
-	glVertex3f(2.5, 0.75, 0.25);
-	glVertex3f(2.3, 0.75, -0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.3, 0.75, 0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.5, 0.75, 0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.5, 0.75, -0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.3, 0.75, -0.25);
 	glEnd();
 
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 
 
 	//=========================================================
@@ -5561,9 +5676,9 @@ void optimusPrime()
 	glPopMatrix();
 
 	glPushMatrix();
-
-	glRotatef(-232, 0.0, 0.0, 1.0);
-	glTranslatef(-1.0, -1.6 + y, 0.6 + z);
+	
+	//glRotatef(-232, 0.0, 0.0, 1.0);
+	//glTranslatef(-1.0, -1.6 , 0.6 );
 
 
 
@@ -5573,7 +5688,7 @@ void optimusPrime()
 	if (trigger == true)
 	{
 		glPushMatrix();
-		glTranslatef(firebullet -= 0.001, 0, 0);
+		glTranslatef(firebullet -= 0.01, 0, 0);
 		pos[0] = -2 + firebullet;
 		pos[1] = 1 + 0.5;
 		pos[2] = 0;
@@ -5662,7 +5777,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 		//glFrustum(5, -5, -5, 5, 2, 10);
 		glOrtho(-3, 3, -3, 3, -10, 10);
 		glLoadIdentity();
-		//glTranslatef(x, y, z);
+		glTranslatef(x, y, z);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClearColor(0.53, 0.81, 0.92, 0);
