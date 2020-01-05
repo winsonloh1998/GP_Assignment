@@ -46,8 +46,13 @@ float rightMiddleFingerDegree = 30.0;
 float thumbLowerFingerDegree = 0.0;
 float thumbUpperFingerDegree = 0.0;
 
-float leftLowerArmSwing = 0.0;
-float rightLowerArmSwing = 0.0;
+/* Head Turn Rate */
+float headTurn = 0.0;
+
+/* Projection Method */
+boolean goPerspective = false;
+boolean goOrtho = false;
+boolean goBackOrigin = false;
 
 float x = 0.0, y = 0.0, z = 0.0;
 
@@ -247,6 +252,20 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				if (rightWholeArmSpeed <= 0)
 					rightWholeArmSpeed = 0;
 			}
+		}
+		else if (wParam == '2') 
+		{
+			if (leftOrRight == 1) {
+				headTurn++;
+				if (headTurn >= 20)
+					headTurn = 20;
+			}
+			else if (leftOrRight == 2) {
+				headTurn--;
+				if (headTurn <= -20)
+					headTurn = -20;
+			}
+
 		}
 		break;
 
@@ -668,6 +687,10 @@ void legArmor1() {
 	glTexCoord2f(0, 0.3); glVertex3f(-0.15, -1.4, -0.2);
 	glEnd();
 
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
 	//Metal Plate 1 
 	glBegin(GL_POLYGON);
 	glVertex3f(-0.35, -1.1, -0.25);
@@ -700,9 +723,7 @@ void legArmor1() {
 	glVertex3f(-0.35, -1.395, -0.25);
 	glEnd();
 
-	glDisable(GL_TEXTURE_2D);
-	DeleteObject(hBMP);
-	glDeleteTextures(1, &texture);
+
 }
 
 void legArmor2() {
@@ -889,43 +910,6 @@ void legArmor3() {
 	gluCylinder(legCylinder, 0.05, 0.05, 0.3, 20, 20);
 	gluDeleteQuadric(legCylinder);
 	glPopMatrix();
-
-	glDisable(GL_TEXTURE_2D);
-	DeleteObject(hBMP);
-	glDeleteTextures(1, &texture);
-}
-
-void legArmor4() {
-	/* Texture */
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"blue.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
-		LR_LOADFROMFILE);
-	GetObject(hBMP, sizeof(BMP), &BMP);
-
-	glEnable(GL_TEXTURE_2D);
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
-		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
-
-	//Strap Above
-	glBegin(GL_POLYGON);
-	glTexCoord2f(0, 1); glVertex3f(-0.4, -0.99, 0.21);
-	glTexCoord2f(0.2, 1); glVertex3f(-0.1, -0.99, 0.21);
-	glTexCoord2f(0.2, 0.7); glVertex3f(-0.1, -1.01, 0.21);
-	glTexCoord2f(0, 0.7); glVertex3f(-0.4, -1.01, 0.21);
-	glEnd();
-
-	//Strap Below
-	glBegin(GL_POLYGON);
-	glTexCoord2f(0, 1); glVertex3f(-0.4, -1.5, 0.21);
-	glTexCoord2f(0.2, 1); glVertex3f(-0.1, -1.5, 0.21);
-	glTexCoord2f(0.2, 0.7); glVertex3f(-0.1, -1.6, 0.21);
-	glTexCoord2f(0, 0.7); glVertex3f(-0.4, -1.6, 0.21);
-	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
 	DeleteObject(hBMP);
@@ -3431,7 +3415,7 @@ void upperArmJoint() {
 	glDeleteTextures(1, &texture);
 }
 
-void upperArm() {
+void upperArm(boolean isRight) {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
@@ -3498,6 +3482,36 @@ void upperArm() {
 	glDisable(GL_TEXTURE_2D);
 	DeleteObject(hBMP);
 	glDeleteTextures(1, &texture);
+
+	/* For Logo Decoration */
+
+	if (isRight) {
+		/* Texture */
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+		hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
+			"autobot.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+			LR_LOADFROMFILE);
+		GetObject(hBMP, sizeof(BMP), &BMP);
+
+		glEnable(GL_TEXTURE_2D);
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
+			BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+		glBegin(GL_POLYGON);
+		glTexCoord2f(1, 0); glVertex3f(-0.5, 1.2, 0.26);
+		glTexCoord2f(0, 0); glVertex3f(-0.65, 1.2, 0.26);
+		glTexCoord2f(0, 1); glVertex3f(-0.65, 1.45, 0.26);
+		glTexCoord2f(1, 1); glVertex3f(-0.5, 1.45, 0.26);
+		glEnd();
+
+		glDisable(GL_TEXTURE_2D);
+		DeleteObject(hBMP);
+		glDeleteTextures(1, &texture);
+	}
 }
 
 void armMuscle1() {
@@ -4990,6 +5004,10 @@ void backArmor3() {
 	glTexCoord2f(0.2, 0.3); glVertex3f(-0.25, 1.5, 0.35);
 	glTexCoord2f(0, 0.3); glVertex3f(0.25, 1.5, 0.35);
 	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 }
 
 void backArmor4() {
@@ -5033,19 +5051,7 @@ void backArmor4() {
 	glTexCoord2f(0, 0.3); glVertex3f(-0.25, 1.0, 0.45);
 	glEnd();
 
-	//Upper Triangle
-	glBegin(GL_POLYGON);
-	glVertex3f(-0.25, 1.55, 0.45);
-	glVertex3f(-0.25, 1.55, 0.35);
-	glVertex3f(-0.35, 1.55, 0.35);
-	glEnd();
 
-	//Below Triangle
-	glBegin(GL_POLYGON);
-	glVertex3f(-0.25, 1.0, 0.45);
-	glVertex3f(-0.25, 1.0, 0.35);
-	glVertex3f(-0.35, 1.0, 0.35);
-	glEnd();
 
 	//////////////////////////////////////////////////////////////
 
@@ -5074,23 +5080,39 @@ void backArmor4() {
 	glTexCoord2f(0, 0.3); glVertex3f(0.25, 1.0, 0.45);
 	glEnd();
 
-	//Upper Triangle
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
+	////////////////////////////////////////////////////////////////////
+
+	//Left - Upper Triangle
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.25, 1.55, 0.45);
+	glVertex3f(-0.25, 1.55, 0.35);
+	glVertex3f(-0.35, 1.55, 0.35);
+	glEnd();
+
+	//Left - Below Triangle
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.25, 1.0, 0.45);
+	glVertex3f(-0.25, 1.0, 0.35);
+	glVertex3f(-0.35, 1.0, 0.35);
+	glEnd();
+
+	//Right - Upper Triangle
 	glBegin(GL_POLYGON);
 	glVertex3f(0.25, 1.55, 0.45);
 	glVertex3f(0.25, 1.55, 0.35);
 	glVertex3f(0.35, 1.55, 0.35);
 	glEnd();
 
-	//Below Triangle
+	//Right - Below Triangle
 	glBegin(GL_POLYGON);
 	glVertex3f(0.25, 1.0, 0.45);
 	glVertex3f(0.25, 1.0, 0.35);
 	glVertex3f(0.35, 1.0, 0.35);
 	glEnd();
-
-	glDisable(GL_TEXTURE_2D);
-	DeleteObject(hBMP);
-	glDeleteTextures(1, &texture);
 }
 
 void gun()
@@ -6217,60 +6239,11 @@ void bullet()
 }
 
 void background() {
-	/*
-	//Front
-	glBegin(GL_POLYGON);
-	glVertex3f(-5, 5, -5);
-	glVertex3f(5, 5, -5);
-	glVertex3f(5, -5, -5);
-	glVertex3f(-5, -5, -5);
-	glEnd();
+	
 
-	//Left
-	glBegin(GL_POLYGON);
-	glVertex3f(-5, -5, -5);
-	glVertex3f(-5, -5, 5);
-	glVertex3f(-5, 5, 5);
-	glVertex3f(-5, 5, -5);
-	glEnd();
-
-	//Top
-	glBegin(GL_POLYGON);
-	glVertex3f(-5, 5, -5);
-	glVertex3f(-5, 5, 5);
-	glVertex3f(5, 5, 5);
-	glVertex3f(5, 5, -5);
-	glEnd();
-
-	//Right
-	glBegin(GL_POLYGON);
-	glVertex3f(5, 5, -5);
-	glVertex3f(5, 5, 5);
-	glVertex3f(5, -5, 5);
-	glVertex3f(5, -5, -5);
-	glEnd();
-
-	//Bottom
-	glBegin(GL_POLYGON);
-	glVertex3f(5, -5, -5);
-	glVertex3f(-5, -5, -5);
-	glVertex3f(-5, -5, 5);
-	glVertex3f(5, -5, 5);
-	glEnd();
-
-	//Back
-	glBegin(GL_POLYGON);
-	glVertex3f(5, -5, 5);
-	glVertex3f(-5, -5, 5);
-	glVertex3f(-5, 5, 5);
-	glVertex3f(5, 5, 5);
-	glEnd();
-	*/
-
-	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"titan.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		"bg1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -6282,18 +6255,90 @@ void background() {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
 		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
 
-	GLUquadricObj *backgroundSphere = NULL;
-	backgroundSphere = gluNewQuadric();
+	//Front
+	glBegin(GL_POLYGON);
+	glTexCoord2f(1, 1); glVertex3f(-50, 50, -50);
+	glTexCoord2f(0, 1); glVertex3f(50, 50, -50);
+	glTexCoord2f(0, 0); glVertex3f(50, -2, -50);
+	glTexCoord2f(1, 0); glVertex3f(-50, -2, -50);
+	glEnd();
 
-	glPushMatrix();
-	glTranslatef(0.1, 0.55, 0.1);
-	gluQuadricDrawStyle(backgroundSphere, GLU_FILL);
-	gluQuadricTexture(backgroundSphere, true);
-	gluSphere(backgroundSphere, 5, 100, 100);
-	gluDeleteQuadric(backgroundSphere);
-	glPopMatrix();
+	//Left
+	glBegin(GL_POLYGON);
+	glTexCoord2f(1, 0); glVertex3f(-50, -2, -50);
+	glTexCoord2f(0, 0); glVertex3f(-50, -2, 50);
+	glTexCoord2f(0, 1); glVertex3f(-50, 50, 50);
+	glTexCoord2f(1, 1); glVertex3f(-50, 50, -50);
+	glEnd();
 
+	//Right
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 1); glVertex3f(50, 50, -50);
+	glTexCoord2f(1, 1); glVertex3f(50, 50, 50);
+	glTexCoord2f(1, 0); glVertex3f(50, -2, 50);
+	glTexCoord2f(0, 0); glVertex3f(50, -2, -50);
+	glEnd();
 
+	//Back
+	glBegin(GL_POLYGON);
+	glTexCoord2f(1, 0); glVertex3f(50, -2, 50);
+	glTexCoord2f(0, 0); glVertex3f(-50, -2, 50);
+	glTexCoord2f(0, 1); glVertex3f(-50, 50, 50);
+	glTexCoord2f(1, 1); glVertex3f(50, 50, 50);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
+		"sky.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
+		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+	//Top
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex3f(-50, 50, -50);
+	glTexCoord2f(0, 1); glVertex3f(-50, 50, 50);
+	glTexCoord2f(1, 1); glVertex3f(50, 50, 50);
+	glTexCoord2f(1, 0); glVertex3f(50, 50, -50);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
+		"floor.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
+		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+	//Bottom
+	glBegin(GL_POLYGON);
+	glTexCoord2f(1, 1); glVertex3f(50, -2, -50);
+	glTexCoord2f(1, 0); glVertex3f(-50, -2, -50);
+	glTexCoord2f(0, 0); glVertex3f(-50, -2, 50);
+	glTexCoord2f(0, 1); glVertex3f(50, -2, 50);
+	glEnd();
+	
 	glDisable(GL_TEXTURE_2D);
 	DeleteObject(hBMP);
 	glDeleteTextures(1, &texture);
@@ -6312,7 +6357,12 @@ void optimusPrime()
 	chest();
 	middleChest();
 	sixPackArmor1();
+
+	glPushMatrix();
+	glRotatef(headTurn, 0, 1, 0);
 	head();
+	glPopMatrix();
+
 	chestArmor2();
 	backArmor1();
 	backArmor2();
@@ -6409,15 +6459,13 @@ void optimusPrime()
 	thighArmor4();
 	glPopMatrix();
 
-
-
 	glPushMatrix();
 	glTranslatef(0, 1.27, 0.1);
 	glRotatef(leftWholeArmSpeed, 1, 0, 0);
 	glTranslatef(0, -1.27, -0.1);
 
 	upperArmJoint();
-	upperArm();
+	upperArm(false);
 	armMuscle1();
 	armMuscle2();
 	muscleLowerArmJoint();
@@ -6434,12 +6482,13 @@ void optimusPrime()
 	lowerArmArmor2();
 	hand(0);
 
-
 	glPopMatrix();
 
 	glPopMatrix();
 
 	/////////////////////////////// RIGHT PART FROM SCREEN VIEW ///////////////////////////////
+	/* RIGHT ARM LOGO*/
+
 	/* Translate Shoe To The Right Part*/
 	glPushMatrix();
 		if (stepcounter % 6 == 3)
@@ -6470,7 +6519,7 @@ void optimusPrime()
 					/* Due to not symmetric, translate it to make it symmetric */
 					glPushMatrix();
 						glTranslatef(0, 0, -0.2);
-						upperArm();
+						upperArm(true);
 						armMuscle1();
 						armMuscle2();
 						armAntenna();
@@ -6581,6 +6630,26 @@ void optimusPrime()
 }
 //--------------------------------------------------------------------
 
+void goPerspectiveView() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glScalef(0.5, 0.5, 0.5);
+	gluPerspective(60.0, 1.0, 1, 100);
+	glFrustum(-1, 1, -1, 1, 1, 100);
+}
+
+void goOrthoView() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glScalef(0.5, 0.5, 0.5);
+	glOrtho(-1, 1, -1, 1, 1, 100);
+}
+
+void goBackOriginView() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+}
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 {
 	WNDCLASSEX wc;
@@ -6627,6 +6696,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 	float stepmovementz = 0.0;
 	float stepmovementx = 0.0;
 	float temp = 0.0;
+
+
 	while (true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -6636,6 +6707,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+		
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glScalef(0.4, 0.4, 0.4);
+		gluPerspective(30.0, 1.0, 0.5, 20);
+		glFrustum(-2, 2, -2, 2, 1, 20);
+		
 		//glMatrixMode(GL_PROJECTION);
 		//gluPerspective(60, 1, 1, 100);
 		//glFrustum(-1, 1, -1, 1, 1, 10);
@@ -6664,15 +6742,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 		}
 
 		glPushMatrix();
-
 		glTranslatef(stepmovementx, 0.0, stepmovementz);
 		glRotatef(turnrate, 0.0, 1.0, 0.0);
 		optimusPrime();
-
-
 		glPopMatrix();
-
-
 
 		SwapBuffers(hdc);
 	}
