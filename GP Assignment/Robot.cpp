@@ -6,6 +6,8 @@
 
 #pragma comment (lib, "OpenGL32.lib")
 #pragma comment (lib, "GLU32.lib")
+#pragma comment(lib, "winmm.lib")
+
 #pragma warning(disable:4305)
 
 #define WINDOW_TITLE "Optimus Prime"
@@ -68,6 +70,14 @@ boolean goBackOrigin = false;
 int inWhatProjectionMode = 0; /* [0 - None] [1 - Ortho] [2 - Perspective] */
 
 float x = 0.0, y = 0.0, z = 0.0;
+
+void shootSound() {
+	PlaySound(TEXT("shoot.wav"), NULL, SND_ASYNC | SND_FILENAME);
+}
+
+void startingSound() {
+	PlaySound(TEXT("start.wav"), NULL, SND_ASYNC | SND_FILENAME);
+}
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -137,7 +147,12 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		else if (wParam == 'M')
 			leftOrRight = 2;
 		else if (wParam == 'F')
-			trigger = true;
+		{
+			if (drawGun == true) {
+				trigger = true;
+				shootSound();
+			}
+		}
 		else if (wParam == 'T')
 			turnrate += 90;
 		else if (wParam == 'Y')
@@ -6831,12 +6846,16 @@ void optimusPrime()
 	{
 		if (leftWholeArmSpeed <= 200)
 		{
-			leftWholeArmSpeed+=anglespeed;
+			leftWholeArmSpeed += anglespeed;
 		}
+		else
+			leftWholeArmSpeed = 200.1;
 		if (leftArmUpSpeed <= 115)
 		{
 			leftArmUpSpeed += anglespeed;
 		}
+		else
+			leftArmUpSpeed = 115.1;
 		if (leftWholeArmSpeed > 200 && leftArmUpSpeed > 115)
 		{
 			usegun = true;
@@ -6851,10 +6870,14 @@ void optimusPrime()
 		{
 			leftWholeArmSpeed += anglespeed;
 		}
+		else
+			leftWholeArmSpeed = 200.1;
 		if (leftArmUpSpeed <= 115)
 		{
 			leftArmUpSpeed += anglespeed;
 		}
+		else
+			leftArmUpSpeed = 115.1;
 		if (leftWholeArmSpeed > 200 && leftArmUpSpeed > 115)
 		{
 			usegun = false;
@@ -6867,12 +6890,16 @@ void optimusPrime()
 	{
 		if (leftWholeArmSpeed >= 45)
 		{
-			leftWholeArmSpeed-= anglespeed;
+			leftWholeArmSpeed -= anglespeed;
 		}
+		else
+			leftWholeArmSpeed = 44.9;
 		if (leftArmUpSpeed >= 45)
 		{
-			leftArmUpSpeed-= anglespeed;
+			leftArmUpSpeed -= anglespeed;
 		}
+		else
+			leftArmUpSpeed = 44.9;
 		if (leftWholeArmSpeed < 45 && leftArmUpSpeed < 45)
 			backNormal = 2;
 
@@ -6893,7 +6920,7 @@ void optimusPrime()
 		else
 			leftArmUpSpeed = 0;
 		
-		if (leftWholeArmSpeed < 0 && leftArmUpSpeed < 0)
+		if (leftWholeArmSpeed <= 0 && leftArmUpSpeed <= 0)
 			backNormal = 0;
 
 	}
@@ -6909,39 +6936,49 @@ void optimusPrime()
 
 	if (swingBlade == 1 && drawBlade == true)
 	{
-		if (rightWholeArmSpeed <= 90)
+		if (rightWholeArmSpeed < 90)
 		{
-			rightWholeArmSpeed+= anglespeed;
+			rightWholeArmSpeed += anglespeed;
 		}
+		else
+			rightWholeArmSpeed = 90;
 		if (rightWholeArmSpeed >= 90)
 			swingBlade++;
 	}
 	if (swingBlade == 2 && drawBlade == true)
 	{
-		if (rightWholeArmSpeed >= 45)
+		if (rightWholeArmSpeed > 45)
 		{
-			rightWholeArmSpeed-= anglespeed;
+			rightWholeArmSpeed -= anglespeed;
 
 		}
-		if (rightArmUpSpeed <= 90)
+		else
+			rightWholeArmSpeed = 45;
+		if (rightArmUpSpeed < 90)
 		{
-			rightArmUpSpeed+= anglespeed;
+			rightArmUpSpeed += anglespeed;
 		}
-		if ((rightWholeArmSpeed < 45) && (rightArmUpSpeed > 90))
+		else
+			rightArmUpSpeed = 90;
+		if ((rightWholeArmSpeed <= 45) && (rightArmUpSpeed >= 90))
 			swingBlade++;
 	}
 	if (swingBlade == 3 && drawBlade == true)
 	{
-		if (rightWholeArmSpeed >= 0)
+		if (rightWholeArmSpeed > 0)
 		{
-			rightWholeArmSpeed-= anglespeed;
+			rightWholeArmSpeed -= anglespeed;
 
 		}
+		else
+			rightWholeArmSpeed = 0;
 		if (rightArmUpSpeed > 0)
 		{
-			rightArmUpSpeed-= anglespeed;
+			rightArmUpSpeed -= anglespeed;
 		}
-		if ((rightWholeArmSpeed < 0) && (rightArmUpSpeed < 0))
+		else
+			rightArmUpSpeed = 0;
+		if ((rightWholeArmSpeed <= 0) && (rightArmUpSpeed <= 0))
 			swingBlade = 4;
 	}
 }
@@ -7014,6 +7051,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 
 	float temp = 0.0;
 
+	startingSound();
 
 	while (true)
 	{
