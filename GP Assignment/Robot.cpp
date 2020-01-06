@@ -2,6 +2,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include <math.h>
+#include <iostream>
 
 #pragma comment (lib, "OpenGL32.lib")
 #pragma comment (lib, "GLU32.lib")
@@ -64,6 +65,7 @@ float headTurn = 0.0;
 boolean goPerspective = false;
 boolean goOrtho = false;
 boolean goBackOrigin = false;
+int inWhatProjectionMode = 0; /* [0 - None] [1 - Ortho] [2 - Perspective] */
 
 float x = 0.0, y = 0.0, z = 0.0;
 
@@ -119,17 +121,17 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		else if (wParam == VK_DOWN)
 			glRotatef(1, 1, 0, 0);
 		else if (wParam == 'W')
-			y += 0.1;
-		else if (wParam == 'S')
 			y -= 0.1;
+		else if (wParam == 'S')
+			y += 0.1;
 		else if (wParam == 'A')
 			x += 0.1;
 		else if (wParam == 'D')
 			x -= 0.1;
 		else if (wParam == 'Q')
-			z += 0.1;
-		else if (wParam == 'E')
 			z -= 0.1;
+		else if (wParam == 'E')
+			z += 0.1;
 		else if (wParam == 'N')
 			leftOrRight = 1;
 		else if (wParam == 'M')
@@ -320,6 +322,9 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			goOrtho = true;
 		else if (wParam == 'C')
 			goBackOrigin = true;
+		sprintf_s(s, "x=%f,y=%f,z=%f\n", x, y, z);
+		OutputDebugString(s);
+
 		break;
 
 	case WM_MOUSEWHEEL:
@@ -6411,7 +6416,6 @@ void bullet()
 
 void background() {
 	
-
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
 		"bg1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
@@ -6876,14 +6880,19 @@ void optimusPrime()
 
 	if (backNormal == 3)
 	{
-		if (leftWholeArmSpeed >= 0)
+		if (leftWholeArmSpeed > 0)
 		{
-			leftWholeArmSpeed-= anglespeed;
+			leftWholeArmSpeed -= anglespeed;
 		}
-		if (leftArmUpSpeed >= 0)
+		else
+			leftWholeArmSpeed = 0;
+		if (leftArmUpSpeed > 0)
 		{
 			leftArmUpSpeed-= anglespeed;
 		}
+		else
+			leftArmUpSpeed = 0;
+		
 		if (leftWholeArmSpeed < 0 && leftArmUpSpeed < 0)
 			backNormal = 0;
 
@@ -6951,9 +6960,7 @@ void goOrthoView() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//glScalef(0.4, 0.4, 0.4);
-	glOrtho(-2, 2 , -1, 3, 1, -10);
-
-
+	glOrtho(-2, 2 , -0.8, 3.8, 1, -10);
 }
 
 void goBackOriginView() {
@@ -7022,17 +7029,20 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 		{
 			goPerspectiveView();
 			goPerspective = false;
+			inWhatProjectionMode = 2;
 		}
 
 		if (goOrtho)
 		{
 			goOrthoView();
 			goOrtho = false;
+			inWhatProjectionMode = 1;
 		}
 
 		if (goBackOrigin) {
 			goBackOriginView();
 			goBackOrigin = false;
+			inWhatProjectionMode = 0;
 		}
 
 		
@@ -7041,7 +7051,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 		glEnable(GL_DEPTH_TEST);
 
 		glMatrixMode(GL_MODELVIEW);
-
 
 		if (stepcounter % 6 == 2 || stepcounter % 6 == 4)
 		{
@@ -7055,12 +7064,57 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 			else if (turnrate == 270)
 				stepmovementx += 0.1;
 		}
-		background();
+		
+
+		glPushMatrix();
+
+		if (inWhatProjectionMode == 1)
+		{
+			if (y > 0)
+				y = 0;
+			else if (y < -0.5)
+				y = -0.5;
+
+			if (x > 4.999998)
+				x = 4.999998;
+			else if (x < -4.999997)
+				x = -4.999997;
+
+			if (z > 7.499995)
+				z = 7.499995;
+			else if (z < -2.1)
+				z = -2.1;
+		}
+		else if (inWhatProjectionMode == 2) 
+		{
+			
+			if (y > 0.600000)
+				y = 0.600000;
+			else if (y < -8.499996)
+				y = -8.499996;
+
+			if (x > 8.499996)
+				x = 8.499996;
+			else if (x < -8.499996)
+				x = -8.499996;
+				
+			if (z > 6.199996)
+				z = 6.199996;
+			else if (z < -13.700016)
+				z = -13.700016;
+		}
+
+		glTranslatef(x, y, z);
+
 		glPushMatrix();
 		glTranslatef(stepmovementx, 0.0, stepmovementz);
 		glRotatef(turnrate, 0.0, 1.0, 0.0);
 		optimusPrime();
 		glPopMatrix();
+
+		background();
+		glPopMatrix();
+		
 
 		SwapBuffers(hdc);
 	}
