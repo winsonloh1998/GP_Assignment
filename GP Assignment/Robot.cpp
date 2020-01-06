@@ -25,7 +25,7 @@ char s[256];
 BITMAP BMP;
 HBITMAP hBMP = NULL;
 GLuint texture = 0;
-int leftOrRight = 0; /* [None - 0] [Left - 1]  [Right - 2] */
+int leftOrRight = 0; /* [None - 0] [Left - 1] [Right - 2] */
 
 //for gun
 int stepcounter = 0;
@@ -70,6 +70,9 @@ boolean goBackOrigin = false;
 int inWhatProjectionMode = 0; /* [0 - None] [1 - Ortho] [2 - Perspective] */
 
 float x = 0.0, y = 0.0, z = 0.0;
+
+/* Image Variable */
+LPCSTR majorPartImage = "red.bmp";
 
 void shootSound() {
 	PlaySound(TEXT("shoot.wav"), NULL, SND_ASYNC | SND_FILENAME);
@@ -337,6 +340,13 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			goOrtho = true;
 		else if (wParam == 'C')
 			goBackOrigin = true;
+		else if (wParam == VK_NUMPAD0)
+			majorPartImage = "red.bmp";
+		else if (wParam == VK_NUMPAD1)
+			majorPartImage = "green.bmp";
+		else if (wParam == VK_NUMPAD2)
+			majorPartImage = "army.bmp";
+
 		sprintf_s(s, "x=%f,y=%f,z=%f\n", x, y, z);
 		OutputDebugString(s);
 
@@ -2179,7 +2189,7 @@ void sixpack() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -2249,7 +2259,7 @@ void chestMirrorFrameSide() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -2556,7 +2566,7 @@ void chestArmor1() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -2659,7 +2669,7 @@ void chest() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -3423,7 +3433,7 @@ void upperArmJoint() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -3492,7 +3502,7 @@ void upperArm(boolean isRight) {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -3591,7 +3601,7 @@ void armMuscle1() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -3661,7 +3671,7 @@ void armMuscle2() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -3731,7 +3741,7 @@ void muscleLowerArmJoint() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -3800,7 +3810,7 @@ void lowerArmArmor1() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -3980,7 +3990,7 @@ void lowerArm() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -4788,7 +4798,7 @@ void backArmor2SmallTrapezium() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
@@ -4857,7 +4867,7 @@ void backArmor2Details() {
 	/* Texture */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
-		"red.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
+		majorPartImage, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION |
 		LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
