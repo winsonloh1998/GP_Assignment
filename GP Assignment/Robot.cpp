@@ -8,8 +8,13 @@
 #pragma warning(disable:4305)
 
 #define WINDOW_TITLE "Optimus Prime"
-// for movement
 
+// for movement
+float stepmovementz = 0.0;
+float stepmovementx = 0.0;
+float speed = 0.1; 
+float bulletspeed = 0.1;
+float anglespeed = 5;
 float turnrate = 0.0;
 char s[256];
 //========================================
@@ -73,6 +78,38 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	case WM_KEYDOWN:
 		if (wParam == VK_ESCAPE)
 			PostQuitMessage(0);
+		else if (wParam == ' ')
+		{
+
+			stepmovementx = 0;
+			stepmovementz = 0;
+			leftOrRight = 0;
+			stepcounter = 0;
+			trigger = false;
+			firebullet = 0.0;
+			turnrate = 0.0;
+			backNormal = 0;
+			drawGun = false;
+			usegun = false;
+			swingBlade = 0;
+			bladesize = 0.3;
+			drawBlade = false;
+			bladelocation = -1.2;
+			goPerspective = false;
+			goOrtho = false;
+			goBackOrigin = false;
+			leftUpperFingerDegree = 30.0;
+			leftMiddleFingerDegree = 30.0;
+			rightUpperFingerDegree = 30.0;
+			rightMiddleFingerDegree = 30.0;
+			leftWholeArmSpeed = 0.0;
+			rightWholeArmSpeed = 0.0;
+			leftArmUpSpeed = 0.0;
+			rightArmUpSpeed = 0.0;
+			thumbLowerFingerDegree = 0.0;
+			thumbUpperFingerDegree = 0.0;
+			//reset everything
+		}
 		else if (wParam == VK_LEFT)
 			glRotatef(1, 0, 1, 0);
 		else if (wParam == VK_RIGHT)
@@ -5142,37 +5179,12 @@ void gun()
 
 		glLightfv(GL_LIGHT1, GL_AMBIENT, amb);
 		glLightfv(GL_LIGHT1, GL_POSITION, pos);
+
 		glEnable(GL_LIGHT1);
 	}
-	glPushMatrix();
-	glTranslatef(0.95, 1, 0);
-	glRotatef(90, 0, 1, 0);
-	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
-	gluCylinder(guncylinder, 0.05, 0.1, 0.05, 30, 30);
-	gluDeleteQuadric(guncylinder);
-	glPopMatrix();
-	if (trigger == true)
-	{
-		glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
-		glDisable(GL_LIGHT1);
-		glDisable(GL_LIGHTING);
-	}
-	//gunpart 1 
-
-	glPushMatrix();
-	glTranslatef(1, 1, 0);
-	glRotatef(90, 0, 1, 0);
-
-	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
-	gluCylinder(guncylinder, 0.1, 0.1, 0.3, 30, 30);
-	gluDeleteQuadric(guncylinder);
-	glPopMatrix();
-	//gun part 2 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "flameblade.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "metal.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
 
 
@@ -5184,12 +5196,58 @@ void gun()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
 	glPushMatrix();
+	glTranslatef(0.95, 1, 0);
+	glRotatef(90, 0, 1, 0);
+	guncylinder = gluNewQuadric();
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.05, 0.1, 0.05, 30, 30);
+	gluDeleteQuadric(guncylinder);
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+	glPopMatrix();
+	if (trigger == true)
+	{
+		glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
+		glDisable(GL_LIGHT1);
+		glDisable(GL_LIGHTING);
+	}
+	//gunpart 1 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "metal1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	glPushMatrix();
+	glTranslatef(1, 1, 0);
+	glRotatef(90, 0, 1, 0);
+
+	guncylinder = gluNewQuadric();
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.1, 0.1, 0.3, 30, 30);
+
+	gluDeleteQuadric(guncylinder);
+	glPopMatrix();
+	//gun part 2 
+
+	glPushMatrix();
 	glTranslatef(1.4, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
 	gluQuadricDrawStyle(guncylinder, GLU_FILL);
-	gluCylinder(guncylinder, 0.1, 0.1, 0.3, 30, 30);
 	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.1, 0.1, 0.3, 30, 30);
+
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
 
@@ -5197,6 +5255,7 @@ void gun()
 	DeleteObject(hBMP);
 	glDeleteTextures(1, &texture);
 	//gun part 2 upper
+	glColor3f(0.59, 0.04, 0.04);
 	glBegin(GL_POLYGON);
 	glVertex3f(1.4, 1.1, 0);
 	glVertex3f(1.43, 1.15, 0);
@@ -5274,10 +5333,10 @@ void gun()
 	glVertex3f(1.7, 1.1, 0.027);
 	glVertex3f(1.7, 1.1, -0.02);
 	glEnd();
-
+	glColor3f(1.0, 1.0, 1.0);
 	//===============
 	//gun handle part 2
-
+	glColor3f(1.0, 0.25, 0.1);
 	glBegin(GL_POLYGON);
 	glVertex3f(1.5, 0.9, -0.05);
 	glVertex3f(1.55, 0.9, -0.05);
@@ -5348,8 +5407,9 @@ void gun()
 	glVertex3f(1.55, 0.8, 0.05);
 	glVertex3f(1.5, 0.8, 0.05);
 	glEnd();
-
+	glColor3f(1.0, 1.0, 1.0);
 	//angled grip
+	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(1.55, 0.86, -0.025);
 	glVertex3f(1.65, 0.86, -0.025);
@@ -5391,6 +5451,7 @@ void gun()
 	glVertex3f(1.65, 0.86, 0.0);
 	glVertex3f(1.65, 0.85, 0.0);
 	glEnd();
+
 	//..... xie mian
 	glBegin(GL_POLYGON);
 	glVertex3f(1.65, 0.85, -0.025);
@@ -5517,6 +5578,7 @@ void gun()
 	glVertex3f(1.64, 0.86, 0.0);
 	glVertex3f(1.64, 0.86, -0.025);
 	glEnd();
+
 	//......
 	//laser
 	glPushMatrix();
@@ -5527,15 +5589,29 @@ void gun()
 	gluCylinder(guncylinder, 0.01, 0.01, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
-
+	glColor3f(1.0, 1.0, 1.0);
 	//=====================================		
 
-			//gunpart2 connector
+	//gunpart2 connector
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "metal.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
 	glPushMatrix();
 	glTranslatef(1.3, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
 	gluCylinder(guncylinder, 0.1, 0.05, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
@@ -5544,7 +5620,8 @@ void gun()
 	glTranslatef(1.35, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
 	gluCylinder(guncylinder, 0.05, 0.1, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
@@ -5556,6 +5633,8 @@ void gun()
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
 	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricTexture(guncylinder, true);
+
 	gluCylinder(guncylinder, 0.1, 0.05, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
@@ -5564,21 +5643,66 @@ void gun()
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
 	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricTexture(guncylinder, true);
 	gluCylinder(guncylinder, 0.05, 0.2, 0.05, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
-
-	//gunpart 3
+	//gun part 4 connector
 	glPushMatrix();
-	glTranslatef(1.8, 1, 0);
+	glTranslatef(2.08, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
 	gluQuadricDrawStyle(guncylinder, GLU_LINE);
-	gluCylinder(guncylinder, 0.2, 0.2, 0.3, 30, 30);
+	gluQuadricTexture(guncylinder, true);
+
+	gluCylinder(guncylinder, 0.2, 0.25, 0.02, 30, 30);
 	gluDeleteQuadric(guncylinder);
 	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(1.75, 1, 0);
+	glRotatef(90, 0, 1, 0);
+	guncylinder = gluNewQuadric();
+	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.05, 0.2, 0.05, 30, 30);
+	gluDeleteQuadric(guncylinder);
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+	//gunpart 3
+
+
+	glPushMatrix();
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "gunskin.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	glTranslatef(1.8, 1, 0);
+	glRotatef(90, 0, 1, 0);
+	guncylinder = gluNewQuadric();
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
+	gluCylinder(guncylinder, 0.2, 0.2, 0.3, 30, 30);
+
+	gluDeleteQuadric(guncylinder);
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+	glPopMatrix();
+
+
 	//handle part 3 
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(0.51, 0.54, 0.59);
 	glBegin(GL_POLYGON);
 	glVertex3f(1.9, 0.8, -0.05);
 	glVertex3f(2.0, 0.8, -0.05);
@@ -5599,6 +5723,7 @@ void gun()
 	glEnd();
 
 	glBegin(GL_POLYGON);
+
 	glVertex3f(1.9, 0.6, -0.05);
 	glVertex3f(2.0, 0.6, -0.05);
 	glVertex3f(2.0, 0.65, -0.05);
@@ -5629,8 +5754,9 @@ void gun()
 
 
 
-	glColor3f(1.0, 1.0, 1.0);
-	glBegin(GL_POLYGON);
+
+	glColor3f(0.0, 0.00, 0.0);
+	;	glBegin(GL_POLYGON);
 	glVertex3f(1.9, 0.8, 0.05);
 	glVertex3f(2.0, 0.8, 0.05);
 	glVertex3f(2.0, 0.5, 0.05);
@@ -5657,20 +5783,38 @@ void gun()
 	glVertex3f(2.0, 0.5, 0.05);
 	glVertex3f(1.9, 0.5, 0.05);
 	glEnd();
-
+	glColor3f(1.0, 1.0, 1.0);
 	//==========================================================
 
 		//gun part 4 
 	glPushMatrix();
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "gunskin.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
 	glTranslatef(2.1, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	guncylinder = gluNewQuadric();
-	gluQuadricDrawStyle(guncylinder, GLU_LINE);
+	gluQuadricDrawStyle(guncylinder, GLU_FILL);
+	gluQuadricTexture(guncylinder, true);
 	gluCylinder(guncylinder, 0.25, 0.25, 0.2, 30, 30);
 	gluDeleteQuadric(guncylinder);
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 	glPopMatrix();
+
 	//handle part4 
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(0.51, 0.54, 0.59);
 	glBegin(GL_POLYGON);
 	glVertex3f(2.2, 0.75, -0.05);
 	glVertex3f(2.3, 0.75, -0.05);
@@ -5769,7 +5913,7 @@ void gun()
 	glVertex3f(2.29, 0.3, -0.05);
 	glEnd();
 
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(2.2, 0.75, 0.05);
 	glVertex3f(2.3, 0.75, 0.05);
@@ -5797,16 +5941,9 @@ void gun()
 	glVertex3f(2.3, 0.3, 0.05);
 	glVertex3f(2.2, 0.3, 0.05);
 	glEnd();
+	glColor3f(1.0, 1.0, 1.0);
 	//gun tail
 //==========================================
-	/*
-	glBegin(GL_POLYGON);
-	glVertex3f(2.3,0.75,-0.25);
-	glVertex3f(2.5, 0.75, -0.25);
-	glVertex3f(2.5, 1.3, -0.25);
-	glVertex3f(2.3, 1.4, -0.25);
-	glEnd();
-	*/
 	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(2.3, 1.3, -0.25);
@@ -5880,28 +6017,43 @@ void gun()
 	glVertex3f(2.5, 0.75, -0.25);
 	glEnd();
 	glColor3f(1.0, 1.0, 1.0);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "guntail.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+
 
 
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.3, 0.75, 0.25);
-	glVertex3f(2.5, 0.75, 0.25);
-	glVertex3f(2.5, 1.3, 0.25);
-	glVertex3f(2.3, 1.4, 0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.3, 0.75, 0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.5, 0.75, 0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.5, 1.3, 0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.3, 1.4, 0.25);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.5, 0.75, -0.25);
-	glVertex3f(2.5, 0.75, 0.25);
-	glVertex3f(2.5, 1.30, 0.25);
-	glVertex3f(2.5, 1.30, -0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.5, 0.75, -0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.5, 0.75, 0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.5, 1.30, 0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.5, 1.30, -0.25);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.3, 1.4, -0.25);
-	glVertex3f(2.3, 1.4, 0.25);
-	glVertex3f(2.5, 1.30, 0.25);
-	glVertex3f(2.5, 1.30, -0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.3, 1.4, -0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.3, 1.4, 0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.5, 1.30, 0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.5, 1.30, -0.25);
 	glEnd();
 
 	glBegin(GL_LINE_LOOP);
@@ -5916,21 +6068,24 @@ void gun()
 
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.3, 0.75, -0.25);
-	glVertex3f(2.3, 1.4, -0.25);
-	glVertex3f(2.3, 1.4, 0.25);
-	glVertex3f(2.3, 0.75, 0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.3, 0.75, -0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.3, 1.4, -0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.3, 1.4, 0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.3, 0.75, 0.25);
 
 	glEnd();
 
 
 	glBegin(GL_POLYGON);
-	glVertex3f(2.3, 0.75, -0.25);
-	glVertex3f(2.5, 0.75, -0.25);
-	glVertex3f(2.5, 0.75, 0.25);
-	glVertex3f(2.3, 0.75, -0.25);
+	glTexCoord2d(0, 1); glVertex3f(2.3, 0.75, 0.25);
+	glTexCoord2d(1, 1); glVertex3f(2.5, 0.75, 0.25);
+	glTexCoord2d(1, 0); glVertex3f(2.5, 0.75, -0.25);
+	glTexCoord2d(0, 0); glVertex3f(2.3, 0.75, -0.25);
 	glEnd();
 
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 
 
 	//=========================================================
@@ -6363,7 +6518,7 @@ void background() {
 void optimusPrime()
 {
 	/////////////////////////////////// ONE AND ONLY ONE /////////////////////////////////////
-	background();
+	
 	butt();
 	buttArmor1();
 	buttArmor2();
@@ -6452,7 +6607,7 @@ void optimusPrime()
 	if (trigger == true)
 	{
 		glPushMatrix();
-		glTranslatef(firebullet -= 0.01, 0, 0);
+		glTranslatef(firebullet -= bulletspeed, 0, 0);
 		pos[0] = -2 + firebullet;
 		pos[1] = 1 + 0.5;
 		pos[2] = 0;
@@ -6559,12 +6714,12 @@ void optimusPrime()
 			glRotatef(90, 0.0, 1.0, 0.0);
 			if (bladelocation <= 0.2)
 			{
-				bladelocation += 0.01;
-				bladesize += 0.01;
+				bladelocation += speed;
+				bladesize += speed;
 
 			}
 			glScalef(1.0, bladesize, 1.0);
-			glTranslatef(1.6 + x, bladelocation, 0.7 + z);
+			glTranslatef(1.6 , bladelocation, 0.7 );
 			if (bladelocation >= 0.2) //blade fully extend only show fire
 			{
 				glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
@@ -6602,12 +6757,12 @@ void optimusPrime()
 			glRotatef(90, 0.0, 1.0, 0.0);
 			if (bladelocation >= -1.2)
 			{
-				bladelocation -= 0.01;
-				bladesize -= 0.01;
+				bladelocation -= speed;
+				bladesize -= speed;
 
 			}
 			glScalef(1.0, bladesize, 1.0);
-			glTranslatef(1.6 + x, bladelocation, 0.65 + z);
+			glTranslatef(1.6 , bladelocation, 0.65 );
 
 			blade();
 
@@ -6672,11 +6827,11 @@ void optimusPrime()
 	{
 		if (leftWholeArmSpeed <= 200)
 		{
-			leftWholeArmSpeed++;
+			leftWholeArmSpeed+=anglespeed;
 		}
 		if (leftArmUpSpeed <= 115)
 		{
-			leftArmUpSpeed++;
+			leftArmUpSpeed += anglespeed;
 		}
 		if (leftWholeArmSpeed > 200 && leftArmUpSpeed > 115)
 		{
@@ -6690,11 +6845,11 @@ void optimusPrime()
 	{
 		if (leftWholeArmSpeed <= 200)
 		{
-			leftWholeArmSpeed++;
+			leftWholeArmSpeed += anglespeed;
 		}
 		if (leftArmUpSpeed <= 115)
 		{
-			leftArmUpSpeed++;
+			leftArmUpSpeed += anglespeed;
 		}
 		if (leftWholeArmSpeed > 200 && leftArmUpSpeed > 115)
 		{
@@ -6708,11 +6863,11 @@ void optimusPrime()
 	{
 		if (leftWholeArmSpeed >= 45)
 		{
-			leftWholeArmSpeed--;
+			leftWholeArmSpeed-= anglespeed;
 		}
 		if (leftArmUpSpeed >= 45)
 		{
-			leftArmUpSpeed--;
+			leftArmUpSpeed-= anglespeed;
 		}
 		if (leftWholeArmSpeed < 45 && leftArmUpSpeed < 45)
 			backNormal = 2;
@@ -6723,11 +6878,11 @@ void optimusPrime()
 	{
 		if (leftWholeArmSpeed >= 0)
 		{
-			leftWholeArmSpeed--;
+			leftWholeArmSpeed-= anglespeed;
 		}
 		if (leftArmUpSpeed >= 0)
 		{
-			leftArmUpSpeed--;
+			leftArmUpSpeed-= anglespeed;
 		}
 		if (leftWholeArmSpeed < 0 && leftArmUpSpeed < 0)
 			backNormal = 0;
@@ -6747,7 +6902,7 @@ void optimusPrime()
 	{
 		if (rightWholeArmSpeed <= 90)
 		{
-			rightWholeArmSpeed++;
+			rightWholeArmSpeed+= anglespeed;
 		}
 		if (rightWholeArmSpeed >= 90)
 			swingBlade++;
@@ -6756,12 +6911,12 @@ void optimusPrime()
 	{
 		if (rightWholeArmSpeed >= 45)
 		{
-			rightWholeArmSpeed--;
+			rightWholeArmSpeed-= anglespeed;
 
 		}
 		if (rightArmUpSpeed <= 90)
 		{
-			rightArmUpSpeed++;
+			rightArmUpSpeed+= anglespeed;
 		}
 		if ((rightWholeArmSpeed < 45) && (rightArmUpSpeed > 90))
 			swingBlade++;
@@ -6770,12 +6925,12 @@ void optimusPrime()
 	{
 		if (rightWholeArmSpeed >= 0)
 		{
-			rightWholeArmSpeed--;
+			rightWholeArmSpeed-= anglespeed;
 
 		}
 		if (rightArmUpSpeed > 0)
 		{
-			rightArmUpSpeed--;
+			rightArmUpSpeed-= anglespeed;
 		}
 		if ((rightWholeArmSpeed < 0) && (rightArmUpSpeed < 0))
 			swingBlade = 4;
@@ -6789,13 +6944,16 @@ void goPerspectiveView() {
 	glScalef(0.4, 0.4, 0.4);
 	gluPerspective(30.0, 1.0, 0.5, 20);
 	glFrustum(-2, 2, -2, 2, 1, 20);
+
 }
 
 void goOrthoView() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//glScalef(0.4, 0.4, 0.4);
-	glOrtho(-2, 2, -1, 3, 1, -10);
+	glOrtho(-2, 2 , -1, 3, 1, -10);
+
+
 }
 
 void goBackOriginView() {
@@ -6846,8 +7004,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 
 
 	glScalef(0.4, 0.4, 0.4);
-	float stepmovementz = 0.0;
-	float stepmovementx = 0.0;
+
 	float temp = 0.0;
 
 
@@ -6860,7 +7017,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		
+
 		if (goPerspective)
 		{
 			goPerspectiveView();
@@ -6898,7 +7055,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 			else if (turnrate == 270)
 				stepmovementx += 0.1;
 		}
-
+		background();
 		glPushMatrix();
 		glTranslatef(stepmovementx, 0.0, stepmovementz);
 		glRotatef(turnrate, 0.0, 1.0, 0.0);
