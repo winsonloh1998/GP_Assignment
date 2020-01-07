@@ -6935,12 +6935,14 @@ void optimusPrime()
 
 	}
 
-	if (usegun == false)
+	if (usegun == false&&backNormal==3)
 	{
 		leftUpperFingerDegree = 30;
 		leftMiddleFingerDegree = 30;
 		gun();
 	}
+	if (usegun == false)
+		gun();
 
 	glPopMatrix();
 
